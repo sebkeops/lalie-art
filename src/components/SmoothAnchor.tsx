@@ -38,20 +38,20 @@ export default function SmoothAnchor({ targetId, offset = 0, onClick, ...rest }:
         const el = document.getElementById(targetId);
         if (!el) return;
 
-        const scrollParent = getScrollParent(el);
+        // Élément réellement scrollé (plus fiable que window sur mobile)
+        const scroller = document.scrollingElement as HTMLElement | null;
+        if (!scroller) return;
 
-        if (scrollParent) {
-          // scroll dans le conteneur
-          const parentRect = scrollParent.getBoundingClientRect();
-          const elRect = el.getBoundingClientRect();
-          const top = (elRect.top - parentRect.top) + scrollParent.scrollTop - offset;
+        // 1) Tentative via scrollIntoView (gère mieux certains layouts)
+        el.scrollIntoView({ behavior: "smooth", block: targetId === "contact" ? "end" : "start" });
 
-          scrollParent.scrollTo({ top, behavior: "smooth" });
-        } else {
-          // scroll window classique
-          const y = el.getBoundingClientRect().top + window.scrollY - offset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
+        // 2) Recalage (barre d’adresse Android / viewport dynamique)
+        window.setTimeout(() => {
+          // Recalcule un top précis et force le scroller
+          const rect = el.getBoundingClientRect();
+          const y = rect.top + scroller.scrollTop - offset;
+          scroller.scrollTo({ top: y, behavior: "smooth" });
+        }, 250);
 
         // Hash re-cliquable
         const hash = `#${targetId}`;
