@@ -16,18 +16,23 @@ export default function SmoothAnchor({ targetId, offset = 0, onClick, ...rest }:
         onClick?.(e);
         if (e.defaultPrevented) return;
 
-        // Empêche le jump instantané
         e.preventDefault();
 
         const el = document.getElementById(targetId);
         if (!el) return;
 
-        // Gestion offset (header sticky)
         const y = el.getBoundingClientRect().top + window.pageYOffset - offset;
         window.scrollTo({ top: y, behavior: "smooth" });
 
-        // Met à jour l’URL sans casser l’historique
-        history.pushState(null, "", `#${targetId}`);
+        const hash = `#${targetId}`;
+        if (window.location.hash === hash) {
+          history.replaceState(null, "", window.location.pathname + window.location.search);
+          requestAnimationFrame(() => {
+            history.replaceState(null, "", hash);
+          });
+        } else {
+          history.pushState(null, "", hash);
+        }
       }}
     />
   );

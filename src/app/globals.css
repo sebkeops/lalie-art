@@ -331,10 +331,6 @@ position: relative;
     /* show sticky bar */
   }
 
-  body {
-    padding-bottom: 84px;
-    /* avoid sticky overlaying content */
-  }
 }
 
 /* =========================================================
