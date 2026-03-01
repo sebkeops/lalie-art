@@ -91,6 +91,7 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 90px;
   /* compense ton header sticky */
+  overscroll-behavior: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -107,6 +108,7 @@ body {
     radial-gradient(1200px 600px at 20% 0%, rgba(122, 36, 35, 0.25), transparent 60%),
     radial-gradient(900px 500px at 90% 10%, rgba(219, 157, 170, 0.14), transparent 55%),
     var(--bg);
+   overscroll-behavior-y: none;
 }
 
 @supports not (overflow: clip) {
