@@ -4,24 +4,21 @@ import React from "react";
 
 type Props = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   targetId: string;
-  offset?: number; // si header sticky
+  offset?: number; // hauteur header sticky si besoin
 };
 
-function getScrollParent(el: HTMLElement | null): HTMLElement | null {
-  if (!el) return null;
+function getTargetY(el: HTMLElement, offset: number) {
+  const y = el.getBoundingClientRect().top + window.scrollY - offset;
+  return Math.max(0, y);
+}
 
-  let parent = el.parentElement;
-  while (parent) {
-    const style = window.getComputedStyle(parent);
-    const overflowY = style.overflowY;
-    const isScrollable =
-      (overflowY === "auto" || overflowY === "scroll") && parent.scrollHeight > parent.clientHeight;
+function scrollToY(y: number, behavior: ScrollBehavior) {
+  // 1) window (le plus standard)
+  window.scrollTo({ top: y, behavior });
 
-    if (isScrollable) return parent;
-    parent = parent.parentElement;
-  }
-
-  return null; // => window
+  // 2) compat : certains Chrome Android scrollent plutôt body ou documentElement
+  document.documentElement?.scrollTo?.({ top: y, behavior });
+  document.body?.scrollTo?.({ top: y, behavior });
 }
 
 export default function SmoothAnchor({ targetId, offset = 0, onClick, ...rest }: Props) {
@@ -38,28 +35,30 @@ export default function SmoothAnchor({ targetId, offset = 0, onClick, ...rest }:
         const el = document.getElementById(targetId);
         if (!el) return;
 
-        // Élément réellement scrollé (plus fiable que window sur mobile)
-        const scroller = document.scrollingElement as HTMLElement | null;
-        if (!scroller) return;
-
-        // 1) Tentative via scrollIntoView (gère mieux certains layouts)
-        el.scrollIntoView({ behavior: "smooth", block: targetId === "contact" ? "end" : "start" });
-
-        // 2) Recalage (barre d’adresse Android / viewport dynamique)
-        window.setTimeout(() => {
-          // Recalcule un top précis et force le scroller
-          const rect = el.getBoundingClientRect();
-          const y = rect.top + scroller.scrollTop - offset;
-          scroller.scrollTo({ top: y, behavior: "smooth" });
-        }, 250);
-
-        // Hash re-cliquable
         const hash = `#${targetId}`;
-        if (window.location.hash === hash) {
-          history.replaceState(null, "", window.location.pathname + window.location.search);
-          requestAnimationFrame(() => history.replaceState(null, "", hash));
-        } else {
+
+        // Calcul 1 fois => plus de mismatch de scroller
+        const y = getTargetY(el, offset);
+
+        // Double rAF : fiable sur Android (laisser le viewport / click se stabiliser)
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            scrollToY(y, "smooth");
+
+            // Petite “assurance” non visible : si Android coupe le smooth trop tôt,
+            // on termine au bon endroit sans dégrader desktop.
+            window.setTimeout(() => {
+              const delta = Math.abs(window.scrollY - y);
+              if (delta > 2) scrollToY(y, "auto");
+            }, 450);
+          });
+        });
+
+        // Hash : simple, re-cliquable sans bidouille agressive
+        if (window.location.hash !== hash) {
           history.pushState(null, "", hash);
+        } else {
+          history.replaceState(null, "", window.location.pathname + window.location.search + hash);
         }
       }}
     />
