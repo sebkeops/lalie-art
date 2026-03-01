@@ -91,7 +91,6 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 90px;
   /* compense ton header sticky */
-  overscroll-behavior: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -108,11 +107,19 @@ body {
     radial-gradient(1200px 600px at 20% 0%, rgba(122, 36, 35, 0.25), transparent 60%),
     radial-gradient(900px 500px at 90% 10%, rgba(219, 157, 170, 0.14), transparent 55%),
     var(--bg);
-   overscroll-behavior-y: none;
+}
+
+#__next, 
+main {
+  min-height: 100dvh;
 }
 
 @supports not (overflow: clip) {
-  html, body { overflow-x: hidden; }
+
+  html,
+  body {
+    overflow-x: hidden;
+  }
 }
 
 body {
@@ -120,7 +127,8 @@ body {
   color: var(--text);
   font-family: var(--font-body);
   overflow-x: hidden;
-   background: transparent;
+  background: transparent;
+  min-height: 100dvh;
 }
 
 a {
@@ -246,7 +254,7 @@ img {
   max-width: 1100px;
   margin: 0 auto;
   padding: 14px 18px;
-position: relative;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -514,11 +522,11 @@ position: relative;
   padding: 60px 0;
   position: relative;
   background:
-     repeating-linear-gradient(0deg,
-    rgba(59, 18, 16, .035),
-    rgba(59, 18, 16, .035) 1px,
-     transparent 1px,
-     transparent 6px),
+    repeating-linear-gradient(0deg,
+      rgba(59, 18, 16, .035),
+      rgba(59, 18, 16, .035) 1px,
+      transparent 1px,
+      transparent 6px),
     radial-gradient(1400px 600px at 50% 0%,
       rgba(255, 245, 230, .05),
       transparent 70%),
@@ -535,7 +543,7 @@ position: relative;
   width: 100%;
 }
 
-.homeFlowInner > * {
+.homeFlowInner>* {
   min-width: 0;
 }
 
@@ -957,7 +965,7 @@ position: relative;
 /* ===============================
    Admin: background unifié
 =================================*/
-.adminShell{
+.adminShell {
   min-height: 100vh;
 
   /* IMPORTANT : on n’utilise pas de gradient ici */
@@ -965,12 +973,12 @@ position: relative;
 }
 
 /* Si tu avais des backgrounds sur des sections admin, on les neutralise */
-.adminShell .adminSectionBg{
+.adminShell .adminSectionBg {
   background: transparent;
 }
 
 select option {
-  color: rgba(255,255,255,0.92);
+  color: rgba(255, 255, 255, 0.92);
   background: #0b0f14;
 }
 
@@ -993,7 +1001,7 @@ select option {
 }
 
 /* Le conteneur qui va scaler (et qui est clippé par le parent overflow-hidden) */
-.artworkMediaInner{
+.artworkMediaInner {
   transform: translateZ(0);
   will-change: transform;
   transition: transform .28s ease-out;
@@ -1001,41 +1009,44 @@ select option {
 }
 
 /* On scale le wrapper, pas l'image */
-.group:hover .artworkMediaInner{
+.group:hover .artworkMediaInner {
   transform: translateZ(0) scale(1.04);
 }
 
 /* Image parfaitement stable */
-.artworkCardImg{
-  width:100%;
-  aspect-ratio: 1 / 1;     /* ou 4/3 si tu préfères */
-  height:auto;
+.artworkCardImg {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  /* ou 4/3 si tu préfères */
+  height: auto;
   object-fit: cover;
-  display:block;
+  display: block;
   transform: translateZ(0);
   backface-visibility: hidden;
 }
 
 /* placeholder */
-.artworkCardPlaceholder{
-  background: rgba(255,255,255,0.06);
+.artworkCardPlaceholder {
+  background: rgba(255, 255, 255, 0.06);
 }
 
 /* Empêche les pseudo-éléments/glows de créer du scroll horizontal */
 .homeFlow,
 .homeFeatured {
-  overflow-x: clip; /* mieux que hidden (ne coupe pas les ombres comme un bourrin) */
+  overflow-x: clip;
+  /* mieux que hidden (ne coupe pas les ombres comme un bourrin) */
 }
 
 /* fallback si clip non supporté */
 @supports not (overflow: clip) {
+
   .homeFlow,
   .homeFeatured {
     overflow-x: hidden;
   }
 }
 
-.artworkCardShell{
+.artworkCardShell {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -1051,13 +1062,13 @@ select option {
   will-change: transform;
 }
 
-.artworkCardShell:hover{
+.artworkCardShell:hover {
   transform: translateY(-2px);
   background: rgba(0, 0, 0, 0.24);
   border-color: rgba(255, 245, 230, 0.18);
 }
 
-.artworkCardBody{
+.artworkCardBody {
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -1066,7 +1077,7 @@ select option {
   min-width: 0;
 }
 
-.artworkCardFooter{
+.artworkCardFooter {
   margin-top: auto;
   padding-top: 14px;
   border-top: 1px solid rgba(255, 245, 230, 0.10);
@@ -1077,33 +1088,36 @@ select option {
   min-width: 0;
 }
 
-.footerBottom { grid-column: 1 / -1; }
+.footerBottom {
+  grid-column: 1 / -1;
+}
 
 #contact {
-  scroll-margin-top: 100px; /* hauteur header */
+  scroll-margin-top: 100px;
+  /* hauteur header */
 }
 
 /* Artwork detail page */
-.artworkDetailPage{
+.artworkDetailPage {
   padding-top: 22px;
   padding-bottom: 64px;
 }
 
-.artworkDetailBack{
+.artworkDetailBack {
   display: inline-block;
   text-decoration: underline;
   text-underline-offset: 3px;
-  color: rgba(255,245,230,.85);
+  color: rgba(255, 245, 230, .85);
 }
 
-.artworkDetailLayout{
+.artworkDetailLayout {
   margin-top: 18px;
   display: grid;
   gap: 18px;
 }
 
-@media (min-width: 1024px){
-  .artworkDetailLayout{
+@media (min-width: 1024px) {
+  .artworkDetailLayout {
     grid-template-columns: 1.15fr .85fr;
     gap: 24px;
     align-items: start;
@@ -1111,111 +1125,113 @@ select option {
 }
 
 /* Image */
-.artworkDetailImageWrap{
+.artworkDetailImageWrap {
   border-radius: 22px;
   overflow: hidden;
-  background: rgba(0,0,0,.25);
-  border: 1px solid rgba(255,245,230,.10);
-  box-shadow: 0 28px 70px rgba(0,0,0,.42);
+  background: rgba(0, 0, 0, .25);
+  border: 1px solid rgba(255, 245, 230, .10);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, .42);
 }
 
-.artworkDetailImg{
+.artworkDetailImg {
   width: 100%;
   height: auto;
   display: block;
   cursor: zoom-in;
 }
 
-.artworkDetailNoImage{
+.artworkDetailNoImage {
   padding: 24px;
   opacity: .75;
 }
 
 /* Panel */
-.artworkDetailPanel{
+.artworkDetailPanel {
   border-radius: 22px;
   padding: 18px;
-  background: rgba(0,0,0,.40);
-  border: 1px solid rgba(255,245,230,.10);
+  background: rgba(0, 0, 0, .40);
+  border: 1px solid rgba(255, 245, 230, .10);
   backdrop-filter: blur(12px);
-  color: rgba(255,245,230,.95);
+  color: rgba(255, 245, 230, .95);
 }
 
-@media (min-width: 640px){
-  .artworkDetailPanel{ padding: 22px; }
+@media (min-width: 640px) {
+  .artworkDetailPanel {
+    padding: 22px;
+  }
 }
 
-.artworkDetailTitle{
+.artworkDetailTitle {
   margin: 0 0 10px 0;
   font-size: clamp(22px, 2.4vw, 30px);
   letter-spacing: -0.2px;
 }
 
 /* Meta rows */
-.artworkDetailMeta{
+.artworkDetailMeta {
   display: grid;
   gap: 10px;
   font-size: 14px;
   opacity: .95;
 }
 
-.artworkDetailMetaRow{
+.artworkDetailMetaRow {
   display: grid;
   grid-template-columns: 92px 1fr;
   gap: 10px;
   min-width: 0;
 }
 
-.artworkDetailMetaLabel{
-  color: rgba(255,245,230,.70);
+.artworkDetailMetaLabel {
+  color: rgba(255, 245, 230, .70);
 }
 
-.artworkDetailMetaValue{
-  color: rgba(255,245,230,.95);
+.artworkDetailMetaValue {
+  color: rgba(255, 245, 230, .95);
   min-width: 0;
 }
 
 /* Divider + description */
-.artworkDetailDivider{
+.artworkDetailDivider {
   margin: 16px 0;
   border: 0;
   height: 1px;
-  background: rgba(255,245,230,.10);
+  background: rgba(255, 245, 230, .10);
 }
 
-.artworkDetailDescription{
+.artworkDetailDescription {
   margin: 0;
   white-space: pre-wrap;
   line-height: 1.65;
-  color: rgba(255,245,230,.90);
+  color: rgba(255, 245, 230, .90);
 }
 
 /* CTA */
-.artworkDetailCTA{
+.artworkDetailCTA {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   margin-top: 14px;
   padding: 12px 16px;
   border-radius: 999px;
-  background: linear-gradient(135deg, rgba(122,36,35,1), rgba(163,55,46,1));
+  background: linear-gradient(135deg, rgba(122, 36, 35, 1), rgba(163, 55, 46, 1));
   color: white;
   text-decoration: none;
   font-weight: 700;
-  box-shadow: 0 14px 40px rgba(163,55,46,.25);
+  box-shadow: 0 14px 40px rgba(163, 55, 46, .25);
   transition: transform 160ms ease, box-shadow 160ms ease;
 }
 
-.artworkDetailCTA:hover{
+.artworkDetailCTA:hover {
   transform: translateY(-1px);
-  box-shadow: 0 18px 50px rgba(163,55,46,.32);
+  box-shadow: 0 18px 50px rgba(163, 55, 46, .32);
 }
 
 /* Lightbox */
-.artworkLightbox{
+.artworkLightbox {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.85);
+  background: rgba(0, 0, 0, .85);
   display: grid;
   place-items: center;
   padding: 24px;
@@ -1223,71 +1239,77 @@ select option {
   cursor: zoom-out;
 }
 
-.artworkLightboxImg{
+.artworkLightboxImg {
   max-width: min(1100px, 96vw);
   max-height: 90vh;
   border-radius: 14px;
   display: block;
-  box-shadow: 0 30px 90px rgba(0,0,0,.55);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, .55);
 }
 
-.artworkLightboxClose{
+.artworkLightboxClose {
   position: fixed;
   top: 16px;
   right: 16px;
   padding: 10px 12px;
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.20);
-  background: rgba(0,0,0,.60);
+  border: 1px solid rgba(255, 255, 255, .20);
+  background: rgba(0, 0, 0, .60);
   color: white;
   cursor: pointer;
 }
 
-@media (min-width: 1024px){
+@media (min-width: 1024px) {
+
   /* Le bloc image s’alignera mieux au panneau */
-  .artworkDetailImageWrap{
-    max-width: 720px;      /* ajuste si besoin: 680–760 */
-    justify-self: start;   /* évite l’étirement */
+  .artworkDetailImageWrap {
+    max-width: 720px;
+    /* ajuste si besoin: 680–760 */
+    justify-self: start;
+    /* évite l’étirement */
   }
 
   /* Optionnel: si tu veux que l’image ne “dépasse” jamais en hauteur */
-  .artworkDetailImg{
-    max-height: 78vh;      /* limite l’impact visuel */
+  .artworkDetailImg {
+    max-height: 78vh;
+    /* limite l’impact visuel */
     object-fit: contain;
-    background: rgba(0,0,0,.25);
+    background: rgba(0, 0, 0, .25);
   }
 }
 
-@media (max-width: 767px){
-  .artworkDetailImg{ cursor: default; }
+@media (max-width: 767px) {
+  .artworkDetailImg {
+    cursor: default;
+  }
 }
 
 /* Price row (only when available) */
-.artworkDetailPriceRow{
+.artworkDetailPriceRow {
   margin-top: 14px;
   padding: 12px 14px;
   border-radius: 16px;
-  border: 1px solid rgba(255,245,230,.10);
-  background: rgba(0,0,0,.22);
+  border: 1px solid rgba(255, 245, 230, .10);
+  background: rgba(0, 0, 0, .22);
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
 }
 
-.artworkDetailPriceLabel{
-  color: rgba(255,245,230,.70);
+.artworkDetailPriceLabel {
+  color: rgba(255, 245, 230, .70);
   font-size: 13px;
 }
 
-.artworkDetailPriceValue{
-  color: rgba(255,245,230,.95);
+.artworkDetailPriceValue {
+  color: rgba(255, 245, 230, .95);
   font-weight: 700;
   letter-spacing: -0.1px;
 }
 
 /* CTA base */
-.artworkDetailCTA{
+.artworkDetailCTA {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1300,32 +1322,32 @@ select option {
 }
 
 /* CTA - BUY (available) */
-.artworkDetailCTA--buy{
-  background: linear-gradient(135deg, rgba(122,36,35,1), rgba(163,55,46,1));
+.artworkDetailCTA--buy {
+  background: linear-gradient(135deg, rgba(122, 36, 35, 1), rgba(163, 55, 46, 1));
   color: #fff;
-  box-shadow: 0 14px 40px rgba(163,55,46,.25);
+  box-shadow: 0 14px 40px rgba(163, 55, 46, .25);
 }
 
-.artworkDetailCTA--buy:hover{
+.artworkDetailCTA--buy:hover {
   transform: translateY(-1px);
-  box-shadow: 0 18px 50px rgba(163,55,46,.32);
+  box-shadow: 0 18px 50px rgba(163, 55, 46, .32);
 }
 
 /* CTA - CONTACT (reserved/sold) */
-.artworkDetailCTA--contact{
-  background: rgba(0,0,0,.20);
-  border: 1px solid rgba(255,245,230,.16);
-  color: rgba(255,245,230,.92);
+.artworkDetailCTA--contact {
+  background: rgba(0, 0, 0, .20);
+  border: 1px solid rgba(255, 245, 230, .16);
+  color: rgba(255, 245, 230, .92);
 }
 
-.artworkDetailCTA--contact:hover{
+.artworkDetailCTA--contact:hover {
   transform: translateY(-1px);
-  border-color: rgba(255,245,230,.22);
+  border-color: rgba(255, 245, 230, .22);
 }
 
 /* Premium minimalist back button */
 
-.artworkDetailBackBtn{
+.artworkDetailBackBtn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -1333,28 +1355,28 @@ select option {
   padding: 6px 0;
   margin-bottom: 8px;
 
-  color: rgba(255,245,230,.78);
+  color: rgba(255, 245, 230, .78);
   text-decoration: none;
   font-size: 14px;
   letter-spacing: .2px;
 
   transition: color 180ms ease,
-              transform 180ms ease;
+    transform 180ms ease;
 }
 
-.artworkDetailBackBtn:hover{
-  color: rgba(255,245,230,.95);
+.artworkDetailBackBtn:hover {
+  color: rgba(255, 245, 230, .95);
   transform: translateX(-3px);
 }
 
-.artworkDetailBackIcon{
+.artworkDetailBackIcon {
   width: 18px;
   height: 18px;
   opacity: .75;
   transition: transform 180ms ease, opacity 180ms ease;
 }
 
-.artworkDetailBackBtn:hover .artworkDetailBackIcon{
+.artworkDetailBackBtn:hover .artworkDetailBackIcon {
   transform: translateX(-3px);
   opacity: 1;
 }
@@ -1368,7 +1390,8 @@ select option {
 
 /* Icône accueil (mobile) : discret, “velours” */
 .homeIconLink {
-  display: none; /* activé en mobile via media query */
+  display: none;
+  /* activé en mobile via media query */
   width: 34px;
   height: 34px;
   align-items: center;
@@ -1379,7 +1402,7 @@ select option {
 
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
 
   opacity: 0.85;
 }
@@ -1412,8 +1435,8 @@ select option {
     border-radius: 999px;
     color: var(--text);
 
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
 
     backdrop-filter: blur(8px);
     opacity: 0.9;
