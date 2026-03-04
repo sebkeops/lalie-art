@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 export type ArtworkCardData = {
     id: string;
@@ -48,12 +49,14 @@ export function ArtworkCard({
                 <div className="relative overflow-hidden bg-black">
                     <div className="artworkMediaInner">
                         {artwork.imageUrl ? (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img
+                            <Image
                                 src={artwork.imageUrl}
                                 alt={artwork.title}
+                                width={600}
+                                height={600}
                                 className="artworkCardImg"
-                                loading="lazy"
+                                style={{ height: "auto" }}
+                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                 draggable={false}
                             />
                         ) : (

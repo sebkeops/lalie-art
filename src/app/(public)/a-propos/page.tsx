@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
+import Image from "next/image";
 
 type ContentPage = {
   title: string | null;
@@ -75,11 +76,14 @@ export default function AboutPublicPage() {
           <div className="aboutLayout">
             {page.hero_image_url ? (
               <div className="aboutImageCol">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={page.hero_image_url}
                   alt=""
+                  width={600}
+                  height={800}
                   className="aboutImage"
+                  style={{ height: "auto" }}
+                  sizes="(max-width: 820px) 100vw, 40vw"
                 />
               </div>
             ) : null}

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import SmoothAnchor from "@/components/SmoothAnchor";
 
@@ -64,7 +65,7 @@ export default function Header() {
             aria-label="Accueil"
             onClick={onHome ? () => window.location.reload() : undefined}
           >
-            <img src="/logo.svg" alt="Lalie — Crea Lalie Art" className="logo logoPublic" />
+            <Image src="/logo.svg" alt="Lalie — Crea Lalie Art" width={162} height={65} className="logo logoPublic" priority />
           </Link>
 
           {/* Picto mobile positionné indépendamment */}

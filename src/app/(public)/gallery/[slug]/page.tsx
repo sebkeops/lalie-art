@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
 import { getPublicImageUrl } from "@/lib/supabase/storage";
 import Link from "next/link";
+import Image from "next/image";
 import SmoothAnchor from "@/components/SmoothAnchor";
 
 type Artwork = {
@@ -144,11 +145,15 @@ export default function ArtworkPage() {
             <div className="artworkDetailLayout">
                 <div className="artworkDetailImageWrap">
                     {mainImg ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
+                        <Image
                             src={mainImg}
                             alt={artwork.title}
+                            width={1200}
+                            height={900}
                             className="artworkDetailImg"
+                            style={{ height: "auto" }}
+                            sizes="(max-width: 1024px) 100vw, 50vw"
+                            priority
                             onClick={() => {
                                 if (typeof window !== "undefined" && window.matchMedia("(min-width: 768px)").matches) {
                                     setIsOpen(true);
@@ -235,11 +240,14 @@ export default function ArtworkPage() {
 
             {isOpen && mainImg && (
                 <div onClick={() => setIsOpen(false)} className="artworkLightbox">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    <Image
                         src={mainImg}
                         alt={artwork.title}
+                        width={1400}
+                        height={1400}
                         className="artworkLightboxImg"
+                        style={{ width: "auto", height: "auto" }}
+                        sizes="100vw"
                         onClick={(e) => e.stopPropagation()}
                     />
                     <button onClick={() => setIsOpen(false)} className="artworkLightboxClose">

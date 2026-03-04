@@ -4,32 +4,83 @@ Légende : ✅ Traité · 🔄 En cours · ⬜ À faire · ❌ Abandonné
 
 ---
 
-## Priorités hautes ✅
+## 🔴 Critique (impact direct utilisateurs / SEO)
 
-- ✅ Logo visible dans le header (élément central selon le DA)
-- ✅ Section contact avec email cliquable (home : "Prenons contact" + email + téléphone)
-  - Instagram retiré volontairement à la demande de Lalie
+- ✅ **Images non optimisées** — `<img>` remplacés par `<Image>` Next.js sur toutes les pages publiques (WebP/AVIF auto, lazy loading, srcset, priority sur LCP)
+  - Admin gardé en `<img>` (previews blob: URL non supportées par next/image)
+
+- ⬜ **Pages publiques en Server Components** — actuellement toutes `"use client"` → HTML vide pour les crawlers, contenu non indexé par Google
+  - Chantier structurel : Home, Galerie, À propos, Détail œuvre
+  - Garder framer-motion côté client via des sous-composants
 
 ---
 
-## Priorités moyennes
+## 🟠 Haute priorité
 
+- ✅ **Security headers** — ajoutés dans `next.config.ts` : X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy
+
+- ✅ **Page 404 custom** — `src/app/not-found.tsx` créé (cohérent avec le design, liens retour accueil + galerie)
+
+- ⬜ **Google Search Console** — soumettre le sitemap, suivre l'indexation
+
+- ⬜ **Analytics** — intégrer Plausible (privacy-first, léger) ou Google Analytics
+  - Si analytics → prévoir bandeau RGPD
+
+---
+
+## 🟡 Priorité moyenne
+
+### Accessibilité (a11y)
+- ⬜ Audit complet : Lighthouse + navigation clavier + contrastes WCAG AA
+- ⬜ Contraste couleurs : auditer `--wine`, `.muted`, `--rose` sur fond sombre (ratio min 4.5:1)
+- ⬜ Focus visible : vérifier que l'outline n'est pas supprimé dans globals.css
+- ⬜ Lightbox page détail : ajouter `role="dialog"`, `aria-modal`, fermeture par `Escape`, piège focus
+- ⬜ Alt texts plus descriptifs : ex. "Collage de Lalie — [titre]" plutôt que juste le titre
+- ⬜ Balises sémantiques : ajouter `<article>` sur les cards d'œuvres, `aria-label` sur les `<section>`
+- ⬜ Formulaires admin : vérifier aria-labels sur tous les inputs
+
+### Code quality
+- ⬜ Supprimer les `as any` restants dans le code (galerie détail, home)
+- ⬜ Vérifier le RLS Supabase — s'assurer que les policies protègent bien les données admin côté client
+
+### Dev & Maintenance
+- ⬜ Vérifier/créer un README projet (setup local, variables d'env, déploiement)
+- ⬜ Revoir la stratégie de branches Git (feature branches plutôt que tout sur main)
+
+---
+
+## 🟢 Priorité basse / Futures évolutions
+
+- ⬜ Formulaire de contact avec Resend (si forte demande) — prévoir rate limiting à ce moment
+- ⬜ Refonte thème clair — fond ivoire/rose, texte vin sombre (chantier complet, tous les composants à retravailler)
+- ⬜ Tests — au moins les fonctions critiques (slugify, formatage prix, génération sitemap)
+- ⬜ `font-display: swap` — actuellement géré par Adobe Fonts, hors de notre contrôle
+
+---
+
+## SEO ✅
+
+### Quick wins (traités)
+- ✅ robots.txt
+- ✅ sitemap.xml dynamique (pages statiques + slugs œuvres)
+- ✅ Metadata par page (titre, description) via layouts serveur
+- ✅ Open Graph — preview réseaux sociaux (og:title, og:description)
+- ✅ URLs propres — slugs lisibles (/gallery/mon-oeuvre)
+
+### Chantier structurel
+- ⬜ Convertir les pages publiques en Server Components (voir section Critique ci-dessus)
+
+---
+
+## Design & UI ✅
+
+- ✅ Logo visible dans le header
+- ✅ Section contact avec email cliquable (home : "Prenons contact" + email + téléphone)
 - ✅ CTA boutons full-width sur mobile
 - ✅ Respiration verticale entre sections sur mobile
-
----
-
-## Priorités basses
-
-- ✅ Intégrer la police Nautica (si fichier disponible) — actuellement "Things" utilisé
-- ✅ Animation d'entrée sur les cards galerie (cohérence avec la home)
-
----
-
-## Idées / futures évolutions
-
-- ⬜ Formulaire de contact avec Resend (si forte demande)
-- ⬜ Refonte thème clair — fond ivoire/rose, texte vin sombre (chantier complet, tous les composants à retravailler)
+- ✅ Police Nautica via Adobe Fonts
+- ✅ Animation d'entrée sur les cards galerie
+- ✅ Page À propos : layout deux colonnes desktop
 
 ---
 
@@ -43,3 +94,4 @@ Légende : ✅ Traité · 🔄 En cours · ⬜ À faire · ❌ Abandonné
 - ✅ Scroll vers #contact depuis n'importe quelle page (sessionStorage)
 - ✅ Boutons Acheter/Contacter sur page détail → scroll vers footer contact
 - ✅ Liens Accueil/Logo : rechargement si déjà sur la home
+- ✅ Admin : prévisualisation image avant upload (new + edit)
