@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase/client";
 import { deleteArtworkCascade } from "../../../../_utils/deleteArtwork";
+import { slugify } from "../../../../_utils/slugify";
+import { Card, Label, Input, Textarea, Select, Button, Notice } from "../../../../_components/FormFields";
 
 const MIN_YEAR = 2000;
 const CURRENT_YEAR = new Date().getFullYear();
@@ -13,16 +15,6 @@ const YEAR_OPTIONS = Array.from(
   (_, i) => CURRENT_YEAR - i
 );
 
-
-function slugify(input: string) {
-  return input
-    .toLowerCase()
-    .trim()
-    .replace(/[’']/g, "-")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
-}
 
 async function getUniqueSlug(baseSlug: string, currentId?: string) {
   let candidate = baseSlug;
@@ -63,110 +55,6 @@ type Artwork = {
   is_featured: boolean;
 };
 
-function Card({
-  title,
-  children,
-  right,
-}: {
-  title?: string;
-  right?: ReactNode;
-  children: ReactNode;
-}) {
-  return (
-    <section className="rounded-2xl border border-white/10 bg-black/20 p-6">
-      {(title || right) && (
-        <div className="mb-5 flex items-start justify-between gap-4">
-          {title ? <h2 className="text-lg font-semibold">{title}</h2> : <div />}
-          {right}
-        </div>
-      )}
-      {children}
-    </section>
-  );
-}
-
-function Label({ children }: { children: ReactNode }) {
-  return <span className="text-sm font-medium text-white/90">{children}</span>;
-}
-
-function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
-  return (
-    <input
-      {...props}
-      className={[
-        "w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 outline-none",
-        "focus:border-white/40",
-        props.className ?? "",
-      ].join(" ")}
-    />
-  );
-}
-
-function Textarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
-  return (
-    <textarea
-      {...props}
-      className={[
-        "w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 outline-none",
-        "focus:border-white/40",
-        props.className ?? "",
-      ].join(" ")}
-    />
-  );
-}
-
-function Select(props: React.SelectHTMLAttributes<HTMLSelectElement>) {
-  return (
-    <select
-      {...props}
-      className={[
-        "w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 outline-none",
-        "focus:border-white/40",
-        props.className ?? "",
-      ].join(" ")}
-    />
-  );
-}
-
-function Button({
-  variant = "primary",
-  ...props
-}: React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "primary" | "ghost" | "danger";
-}) {
-  const base =
-    "inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-medium transition disabled:opacity-60";
-  const styles =
-    variant === "primary"
-      ? "bg-white text-black hover:opacity-90"
-      : variant === "danger"
-        ? "border border-red-400/40 text-red-100 hover:bg-red-500/10"
-        : "border border-white/15 hover:bg-white/10 text-white";
-
-  return (
-    <button
-      {...props}
-      className={[base, styles, props.className ?? ""].join(" ")}
-    />
-  );
-}
-
-function Notice({ msg }: { msg: string }) {
-  const ok = msg.startsWith("✅");
-  return (
-    <div
-      className={[
-        "text-sm rounded-xl border px-4 py-3",
-        ok
-          ? "border-emerald-400/30 bg-emerald-500/10 text-emerald-100"
-          : "border-red-400/30 bg-red-500/10 text-red-100",
-      ].join(" ")}
-    >
-      {msg}
-    </div>
-  );
-}
-
 export default function EditArtworkPage() {
   const params = useParams<{ id: string }>();
   const id = params?.id;
@@ -198,6 +86,14 @@ export default function EditArtworkPage() {
   const [imgUrl, setImgUrl] = useState<string | null>(null);
   const [imgBusy, setImgBusy] = useState(false);
   const [newImage, setNewImage] = useState<File | null>(null);
+  const [newImagePreview, setNewImagePreview] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!newImage) { setNewImagePreview(null); return; }
+    const url = URL.createObjectURL(newImage);
+    setNewImagePreview(url);
+    return () => URL.revokeObjectURL(url);
+  }, [newImage]);
 
   useEffect(() => {
     if (!id) return;
@@ -362,6 +258,7 @@ export default function EditArtworkPage() {
       setImgPath(newPath);
       setImgUrl(supabase.storage.from("artworks").getPublicUrl(newPath).data.publicUrl);
       setNewImage(null);
+      setNewImagePreview(null);
       setMsg("✅ Image remplacée");
     } catch (err: any) {
       setMsg("❌ " + (err?.message ?? "Erreur remplacement image"));
@@ -441,11 +338,17 @@ export default function EditArtworkPage() {
 
             <div className="grid gap-2">
               <Label>Remplacer l’image</Label>
+              {newImagePreview && (
+                <div className="overflow-hidden rounded-xl border border-white/20 bg-white/5">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={newImagePreview} alt="Aperçu" className="h-40 w-full object-cover" />
+                </div>
+              )}
               <input
                 type="file"
                 accept="image/*"
                 onChange={(e) => setNewImage(e.target.files?.[0] ?? null)}
-                className="text-sm text-white/80"
+                className="block w-full text-sm text-white/80 file:mr-4 file:rounded-lg file:border-0 file:bg-white/10 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white/90 hover:file:bg-white/15"
               />
               <Button type="button" onClick={replaceImage} disabled={!newImage || imgBusy}>
                 {imgBusy ? "Remplacement…" : "Remplacer"}

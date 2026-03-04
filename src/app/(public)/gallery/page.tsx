@@ -84,7 +84,7 @@ export default function GalleryPage() {
 
   if (loading) {
     return (
-      <main style={{ padding: "60px 0" }}>
+      <main className="pageMain">
         <div className="container">
           <div className="card" style={{ padding: 18 }}>
             Chargement…
@@ -95,7 +95,7 @@ export default function GalleryPage() {
   }
 
   return (
-    <main style={{ padding: "60px 0" }}>
+    <main className="pageMain">
       <section className="container" style={{ display: "grid", gap: 18 }}>
         {/* Header */}
         <div className="card" style={{ padding: 20 }}>

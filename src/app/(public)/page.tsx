@@ -34,6 +34,14 @@ export default function HomePage() {
   );
 
   useEffect(() => {
+    // Intercept scroll-to-contact : depuis un lien inter-pages (sessionStorage)
+    // ou depuis une URL directe avec #contact (HashScroll scrollerait trop tôt).
+    const fromLink = sessionStorage.getItem("goToContact") === "1";
+    const fromHash = window.location.hash === "#contact";
+    const needsContactScroll = fromLink || fromHash;
+    if (fromLink) sessionStorage.removeItem("goToContact");
+    if (fromHash) history.replaceState(null, "", window.location.pathname);
+
     (async () => {
       setLoading(true);
 
@@ -81,6 +89,12 @@ export default function HomePage() {
 
       setItems(merged);
       setLoading(false);
+
+      if (needsContactScroll) {
+        setTimeout(() => {
+          document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 80);
+      }
     })();
   }, []);
 
@@ -115,10 +129,10 @@ export default function HomePage() {
             transition={{ duration: 0.5, delay: 0.18 }}
             className="homeHeroCtas"
           >
-            <a className="btn btn-primary" href="/gallery">
+            <Link className="btn btn-primary" href="/gallery">
               Explorer la galerie →
-            </a>
-            <SmoothAnchor className="btn" targetId="contact" offset={0}>
+            </Link>
+            <SmoothAnchor className="btn" targetId="contact" offset={110}>
               Contact
             </SmoothAnchor>
           </motion.div>
@@ -133,7 +147,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* FLOW WRAP (to avoid background “cut”) */}
+      {/* FLOW WRAP (to avoid background "cut") */}
       <section className="homeFlow">
         <div className="container homeFlowInner">
           {/* ABOUT (excerpt) */}
@@ -157,9 +171,9 @@ export default function HomePage() {
               <Link className="btn" href="/a-propos">
                 Lire la suite →
               </Link>
-              <a className="btn btn-primary" href="/gallery">
+              <Link className="btn btn-primary" href="/gallery">
                 Voir la galerie
-              </a>
+              </Link>
             </div>
           </motion.section>
 
@@ -173,9 +187,9 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <a href="/gallery" className="btn">
+              <Link href="/gallery" className="btn">
                 Voir tout
-              </a>
+              </Link>
             </div>
 
             {loading ? (
@@ -184,7 +198,7 @@ export default function HomePage() {
               </div>
             ) : items.length === 0 ? (
               <div className="card" style={{ padding: 18 }}>
-                Aucune œuvre “à la une” pour le moment. (Coche “À la une” + “Publié” dans l’admin)
+                Aucune œuvre "à la une" pour le moment. (Coche "À la une" + "Publié" dans l’admin)
               </div>
             ) : (
               <div className="homeFeaturedGrid">
@@ -226,6 +240,30 @@ export default function HomePage() {
               </div>
             )}
           </section>
+
+          {/* CONTACT */}
+          <motion.section
+            id="contact"
+            className="homeContact"
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.55, ease: "easeOut" }}
+          >
+            <div className="kicker">Une œuvre vous intéresse ?</div>
+            <h2 className="h2">Prenons contact</h2>
+            <p className="muted" style={{ maxWidth: 520 }}>
+              Pour toute demande d’achat, de renseignement ou de commande sur mesure.
+            </p>
+            <div className="homeContactLinks">
+              <a href="mailto:crea.lalie.art@gmail.com" className="btn btn-primary">
+                crea.lalie.art@gmail.com
+              </a>
+              <a href="tel:+33673883144" className="btn">
+                +33 6 73 88 31 44
+              </a>
+            </div>
+          </motion.section>
         </div>
       </section>
     </main>

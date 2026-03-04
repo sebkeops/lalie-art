@@ -77,7 +77,7 @@
   --font-display: "BehindTheNineties", serif;
   --font-body: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial,
     sans-serif;
-  --font-accent: "Things", "BehindTheNineties", serif;
+  --font-accent: "nautica", "Things", serif;
 }
 
 /* =========================================================
@@ -88,21 +88,15 @@
 }
 
 html {
-  scroll-behavior: smooth;
   scroll-padding-top: 90px;
-  /* compense ton header sticky */
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+  /* compense le header sticky pour les ancres */
 }
 
 html,
 body {
   height: 100%;
   overflow-x: clip;
+  /* Fond global unique (le même pour html et body) */
   background:
     radial-gradient(1200px 600px at 20% 0%, rgba(122, 36, 35, 0.25), transparent 60%),
     radial-gradient(900px 500px at 90% 10%, rgba(219, 157, 170, 0.14), transparent 55%),
@@ -183,6 +177,7 @@ img {
 
 .kicker {
   font-family: var(--font-accent);
+  font-size: 20px;
   color: rgba(219, 157, 170, 0.95);
   letter-spacing: 0.2px;
 }
@@ -423,8 +418,7 @@ img {
 .siteFooter {
   padding: 46px 0 26px;
   border-top: 1px solid rgba(255, 245, 230, 0.10);
-  background:
-    #0006;
+  background: rgba(0, 0, 0, 0.65); /* opaque, donc plus de différence */
   padding-bottom: calc(26px + env(safe-area-inset-bottom));
 }
 
@@ -838,69 +832,6 @@ img {
 /* =========================================================
    Loading (global)
    ========================================================= */
-.brandLoader {
-  min-height: 58vh;
-  display: grid;
-  place-items: center;
-  gap: 14px;
-  text-align: center;
-}
-
-.brandLoaderMark {
-  width: 62px;
-  height: 62px;
-  border-radius: 20px;
-
-  display: grid;
-  place-items: center;
-
-  border: 1px solid rgba(255, 245, 230, .16);
-  background: rgba(255, 245, 230, .06);
-  box-shadow: 0 30px 90px rgba(0, 0, 0, .35);
-  backdrop-filter: blur(10px);
-
-  /* animation très sobre */
-  animation: brandPulse 1200ms ease-in-out infinite;
-}
-
-.brandLoaderMono {
-  font-family: var(--font-display);
-  font-size: 34px;
-  line-height: 1;
-  color: rgba(255, 245, 230, .92);
-  transform: translateY(1px);
-}
-
-.brandLoaderText {
-  font-size: 13px;
-  letter-spacing: .2px;
-  color: rgba(255, 245, 230, .70);
-}
-
-@keyframes brandPulse {
-
-  0%,
-  100% {
-    transform: translateY(0);
-    opacity: .92;
-  }
-
-  50% {
-    transform: translateY(-2px);
-    opacity: 1;
-  }
-}
-
-/* Respecte les préférences d’accessibilité */
-@media (prefers-reduced-motion: reduce) {
-  .brandLoaderMark {
-    animation: none;
-  }
-}
-
-/* ===============================
-   Loading
-=================================*/
 
 .brandLoader {
   min-height: 60vh;
@@ -1000,6 +931,28 @@ select option {
   }
 }
 
+@keyframes cardEnter {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.galleryGrid > * {
+  animation: cardEnter 0.45s ease both;
+}
+.galleryGrid > *:nth-child(1)  { animation-delay: 0ms; }
+.galleryGrid > *:nth-child(2)  { animation-delay: 60ms; }
+.galleryGrid > *:nth-child(3)  { animation-delay: 120ms; }
+.galleryGrid > *:nth-child(4)  { animation-delay: 180ms; }
+.galleryGrid > *:nth-child(5)  { animation-delay: 240ms; }
+.galleryGrid > *:nth-child(6)  { animation-delay: 300ms; }
+.galleryGrid > *:nth-child(7)  { animation-delay: 360ms; }
+.galleryGrid > *:nth-child(8)  { animation-delay: 420ms; }
+.galleryGrid > *:nth-child(n+9) { animation-delay: 480ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .galleryGrid > * { animation: none; }
+}
+
 /* Le conteneur qui va scaler (et qui est clippé par le parent overflow-hidden) */
 .artworkMediaInner {
   transform: translateZ(0);
@@ -1088,6 +1041,36 @@ select option {
   min-width: 0;
 }
 
+.artworkStatusBadge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  backdrop-filter: blur(4px);
+  flex-shrink: 0;
+}
+
+.artworkStatusAvailable {
+  border-color: rgba(134, 239, 172, 0.30);
+  background: rgba(34, 197, 94, 0.10);
+  color: rgba(220, 252, 231, 0.95);
+}
+
+.artworkStatusReserved {
+  border-color: rgba(252, 211, 77, 0.30);
+  background: rgba(245, 158, 11, 0.10);
+  color: rgba(254, 243, 199, 0.95);
+}
+
+.artworkStatusSold {
+  border-color: rgba(255, 245, 230, 0.20);
+  background: rgba(255, 245, 230, 0.10);
+  color: rgba(255, 245, 230, 0.80);
+}
+
 .footerBottom {
   grid-column: 1 / -1;
 }
@@ -1095,6 +1078,206 @@ select option {
 #contact {
   scroll-margin-top: 100px;
   /* hauteur header */
+}
+
+/* =========================================================
+   Public layout wrapper
+   ========================================================= */
+.publicSite {
+  display: contents;
+}
+
+@media (max-width: 820px) {
+  .publicSite {
+    display: block;
+    padding-bottom: 68px;
+  }
+}
+
+/* =========================================================
+   Mobile bottom navigation
+   ========================================================= */
+.mobileBottomNav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  align-items: center;
+  justify-content: space-around;
+  padding: 8px 0;
+  padding-bottom: calc(8px + env(safe-area-inset-bottom));
+  background: rgba(59, 18, 16, 0.96);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid rgba(255, 245, 230, 0.12);
+}
+
+.mobileBottomNavLink {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: rgba(255, 245, 230, 0.55);
+  padding: 6px 14px;
+  transition: color 140ms ease;
+}
+
+.mobileBottomNavLinkActive,
+.mobileBottomNavLink:hover {
+  color: var(--ivory);
+}
+
+@media (max-width: 820px) {
+  .mobileBottomNav {
+    display: flex;
+  }
+
+  .logoPublic {
+    height: 46px;
+  }
+
+  .homeHeroCtas {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* Respiration verticale mobile */
+  .hero {
+    padding: 44px 0 18px;
+  }
+
+  .homeFlow {
+    padding: 40px 0;
+  }
+
+  .homeFlowInner {
+    gap: 18px;
+  }
+
+  .homeAboutCard {
+    padding: 18px;
+  }
+
+  .homeFeatured {
+    padding: 18px;
+  }
+
+  .homeContact {
+    padding: 36px 18px;
+  }
+}
+
+/* =========================================================
+   Home — Section contact
+   ========================================================= */
+.homeContact {
+  display: grid;
+  place-items: center;
+  gap: 20px;
+  text-align: center;
+  padding: 56px 32px;
+  border-radius: var(--radius);
+  background: var(--panel);
+  border: 1px solid var(--border);
+}
+
+.homeContactLinks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+@media (max-width: 600px) {
+  .homeContact {
+    padding: 40px 20px;
+  }
+
+  .homeContactLinks {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+}
+
+/* Pages internes (galerie liste, à propos) */
+.pageMain {
+  padding: 60px 0;
+}
+
+@media (max-width: 820px) {
+  .pageMain {
+    padding: 32px 0;
+  }
+}
+
+/* À propos page */
+.aboutCard {
+  padding: 32px;
+  border-radius: 18px;
+}
+
+.aboutLayout {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.aboutImageCol {
+  position: sticky;
+  top: 110px;
+}
+
+.aboutImage {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 245, 230, 0.10);
+}
+
+.aboutSubtitle {
+  margin-top: 14px;
+  max-width: 600px;
+  line-height: 1.75;
+}
+
+.aboutDivider {
+  border: none;
+  border-top: 1px solid rgba(255, 245, 230, 0.10);
+  margin: 28px 0;
+}
+
+.aboutBody {
+  white-space: pre-line;
+  line-height: 1.85;
+  color: rgba(255, 245, 230, 0.88);
+}
+
+@media (max-width: 820px) {
+  .aboutCard {
+    padding: 20px;
+  }
+
+  .aboutLayout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .aboutImageCol {
+    position: static;
+  }
+
+  .aboutImage {
+    aspect-ratio: 4 / 3;
+    max-height: 280px;
+  }
 }
 
 /* Artwork detail page */

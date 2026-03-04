@@ -2,9 +2,9 @@ import { Instagram, Facebook } from "lucide-react";
 
 export default function Footer() {
     return (
-        <footer className="siteFooter" id="contact">
+        <footer className="siteFooter">
             <div className="container siteFooterInner">
-                <div className="footerCol">
+                <div className="footerCol" id="footer-contact">
                     <div className="footerTitle">Contact</div>
                     <a className="footerLink" href="mailto:crea.lalie.art@gmail.com">
                         crea.lalie.art@gmail.com

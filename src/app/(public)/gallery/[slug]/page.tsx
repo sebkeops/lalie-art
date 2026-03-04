@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
 import { getPublicImageUrl } from "@/lib/supabase/storage";
-import SmoothAnchor from "@/components/SmoothAnchor";
 import Link from "next/link";
+import SmoothAnchor from "@/components/SmoothAnchor";
 
 type Artwork = {
     id: string;
@@ -221,8 +221,8 @@ export default function ArtworkPage() {
                     ) : null}
 
                     <SmoothAnchor
-                        targetId="contact"
-                        offset={100} // ajuste si header sticky
+                        targetId="footer-contact"
+                        offset={0}
                         className={[
                             "artworkDetailCTA",
                             isAvailable ? "artworkDetailCTA--buy" : "artworkDetailCTA--contact",

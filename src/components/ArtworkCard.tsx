@@ -27,13 +27,9 @@ function statusLabel(status: ArtworkCardData["status"]) {
 }
 
 function statusClasses(status: ArtworkCardData["status"]) {
-    const base =
-        "inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold border backdrop-blur shrink-0";
-    if (status === "available")
-        return `${base} border-emerald-300/30 bg-emerald-500/10 text-emerald-100`;
-    if (status === "reserved")
-        return `${base} border-amber-300/30 bg-amber-500/10 text-amber-100`;
-    return `${base} border-white/20 bg-white/10 text-white/80`;
+    if (status === "available") return "artworkStatusBadge artworkStatusAvailable";
+    if (status === "reserved") return "artworkStatusBadge artworkStatusReserved";
+    return "artworkStatusBadge artworkStatusSold";
 }
 
 export function ArtworkCard({

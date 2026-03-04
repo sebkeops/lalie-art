@@ -40,11 +40,9 @@ export default function AboutPublicPage() {
 
   if (loading) {
     return (
-      <main style={{ padding: "60px 0"}}>
+      <main className="pageMain">
         <div className="container">
-          <div className="card" style={{ padding: 18, borderRadius: 18 }}>
-            Chargement…
-          </div>
+          <div className="card aboutCard">Chargement…</div>
         </div>
       </main>
     );
@@ -52,9 +50,9 @@ export default function AboutPublicPage() {
 
   if (!page) {
     return (
-      <main style={{ padding: "60px 0" }}>
+      <main className="pageMain">
         <div className="container">
-          <div className="card" style={{ padding: 18, borderRadius: 18 }}>
+          <div className="card aboutCard">
             <div className="h2">À propos</div>
             <p className="muted" style={{ marginTop: 10 }}>
               Contenu indisponible pour le moment.
@@ -71,44 +69,39 @@ export default function AboutPublicPage() {
   }
 
   return (
-    <main style={{ padding: "60px 0" }}>
-      <div className="container" style={{ display: "grid", gap: 18 }}>
-        <section className="card" style={{ padding: 22, borderRadius: 18 }}>
-          <div className="kicker">Lalie — Artiste collagiste</div>
-          <h1 className="h1" style={{ marginTop: 10 }}>
-            {page.title ?? "À propos"}
-          </h1>
-          {page.subtitle ? (
-            <p className="muted" style={{ marginTop: 10, maxWidth: 820, lineHeight: 1.7 }}>
-              {page.subtitle}
-            </p>
-          ) : null}
-        </section>
+    <main className="pageMain">
+      <div className="container">
+        <section className="card aboutCard">
+          <div className="aboutLayout">
+            {page.hero_image_url ? (
+              <div className="aboutImageCol">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={page.hero_image_url}
+                  alt=""
+                  className="aboutImage"
+                />
+              </div>
+            ) : null}
 
-        <section className="card" style={{ padding: 22, borderRadius: 18 }}>
-          {page.hero_image_url ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={page.hero_image_url}
-              alt=""
-              style={{
-                width: "100%",
-                maxHeight: 420,
-                objectFit: "cover",
-                borderRadius: 14,
-                border: "1px solid rgba(255,245,230,.10)",
-                marginBottom: 16,
-              }}
-            />
-          ) : null}
+            <div className="aboutContentCol">
+              <div className="kicker">Lalie — Artiste collagiste</div>
+              <h1 className="h1" style={{ marginTop: 10 }}>
+                {page.title ?? "À propos"}
+              </h1>
 
-          {page.body ? (
-            <div style={{ whiteSpace: "pre-line", lineHeight: 1.8, color: "rgba(255,245,230,.88)" }}>
-              {page.body}
+              {page.subtitle ? (
+                <p className="muted aboutSubtitle">{page.subtitle}</p>
+              ) : null}
+
+              {page.body ? (
+                <>
+                  <hr className="aboutDivider" />
+                  <div className="aboutBody">{page.body}</div>
+                </>
+              ) : null}
             </div>
-          ) : (
-            <p className="muted">Texte à venir.</p>
-          )}
+          </div>
         </section>
       </div>
     </main>

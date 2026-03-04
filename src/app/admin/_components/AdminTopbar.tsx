@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase/client";
+import { useIdleLogout } from "../_hooks/useIdleLogout";
 
 function Button({
   variant = "ghost",
@@ -49,27 +50,23 @@ export default function AdminTopbar() {
     };
   }, []);
 
- const onLogout = async () => {
-  setBusy(true);
-  try {
-    // 1) demande Supabase
-    await supabase.auth.signOut();
-
-    // 2) purge locale (évite que le client réutilise un token en cache)
+  const onLogout = useCallback(async () => {
+    setBusy(true);
     try {
-      localStorage.removeItem("supabase.auth.token");
-      // Supabase stocke souvent sous une clé "sb-<project-ref>-auth-token"
-      Object.keys(localStorage).forEach((k) => {
-        if (k.startsWith("sb-") && k.endsWith("-auth-token")) localStorage.removeItem(k);
-      });
-    } catch {}
+      await supabase.auth.signOut();
+      try {
+        localStorage.removeItem("supabase.auth.token");
+        Object.keys(localStorage).forEach((k) => {
+          if (k.startsWith("sb-") && k.endsWith("-auth-token")) localStorage.removeItem(k);
+        });
+      } catch {}
+      window.location.replace("/admin/login");
+    } finally {
+      setBusy(false);
+    }
+  }, []);
 
-    // 3) force un refresh du runtime Next (recalcule les layouts)
-    window.location.replace("/admin/login");
-  } finally {
-    setBusy(false);
-  }
-};
+  useIdleLogout(onLogout);
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-black/40 backdrop-blur">
