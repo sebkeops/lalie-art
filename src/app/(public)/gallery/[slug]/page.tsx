@@ -1,260 +1,176 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import { supabase } from "@/lib/supabase/client";
-import { getPublicImageUrl } from "@/lib/supabase/storage";
+import { createClient } from "@/lib/supabase/server";
+import { notFound } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import SmoothAnchor from "@/components/SmoothAnchor";
+import { ArtworkImageWithLightbox } from "./_components/ArtworkLightbox";
 
 type Artwork = {
-    id: string;
-    title: string;
-    slug: string;
-    description: string | null;
-    year: number | null;
-    width_cm: number | null;
-    height_cm: number | null;
-    technique: string | null;
-    universe: string | null;
-    subject: string | null;
-    status: "available" | "reserved" | "sold";
-    price_on_request: boolean;
-    price_eur: number | null;
+  id: string;
+  title: string;
+  slug: string;
+  description: string | null;
+  year: number | null;
+  width_cm: number | null;
+  height_cm: number | null;
+  technique: string | null;
+  universe: string | null;
+  subject: string | null;
+  status: "available" | "reserved" | "sold";
+  price_on_request: boolean;
+  price_eur: number | null;
 };
 
 type Img = { path: string; position: number; alt: string | null };
 
-export default function ArtworkPage() {
-    const params = useParams<{ slug: string }>();
-    const slug = params?.slug;
+function buildImageUrl(path: string): string {
+  return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/artworks/${path}`;
+}
 
-    const [loading, setLoading] = useState(true);
-    const [artwork, setArtwork] = useState<Artwork | null>(null);
-    const [images, setImages] = useState<Img[]>([]);
-    const [errorMsg, setErrorMsg] = useState<string | null>(null);
-    const [isOpen, setIsOpen] = useState(false);
+export default async function ArtworkPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const supabase = await createClient();
 
-    useEffect(() => {
-        if (!slug) return;
+  const { data: a } = await supabase
+    .from("artworks")
+    .select(
+      "id,title,slug,description,year,width_cm,height_cm,technique,universe,subject,status,price_on_request,price_eur"
+    )
+    .eq("slug", slug)
+    .maybeSingle();
 
-        (async () => {
-            setLoading(true);
-            setErrorMsg(null);
+  if (!a) notFound();
 
-            const { data: a, error: aErr } = await supabase
-                .from("artworks")
-                .select(
-                    "id,title,slug,description,year,width_cm,height_cm,technique,universe,subject,status,price_on_request,price_eur"
-                )
-                .eq("slug", slug)
-                .maybeSingle();
+  const artwork = a as Artwork;
 
-            if (aErr) {
-                console.error(aErr);
-                setErrorMsg(aErr.message);
-                setLoading(false);
-                return;
-            }
+  const { data: imgs } = await supabase
+    .from("artwork_images")
+    .select("path,position,alt")
+    .eq("artwork_id", artwork.id)
+    .order("position", { ascending: true });
 
-            if (!a) {
-                setErrorMsg(`Aucune œuvre trouvée pour le slug: ${slug}`);
-                setLoading(false);
-                return;
-            }
+  const images = (imgs ?? []) as Img[];
+  const mainImg = images[0]?.path ? buildImageUrl(images[0].path) : null;
 
-            setArtwork(a as Artwork);
+  const statusLabel =
+    artwork.status === "available"
+      ? "Disponible"
+      : artwork.status === "reserved"
+        ? "Réservé"
+        : "Vendu";
 
-            const { data: imgs, error: iErr } = await supabase
-                .from("artwork_images")
-                .select("path,position,alt")
-                .eq("artwork_id", (a as any).id)
-                .order("position", { ascending: true });
+  const isAvailable = artwork.status === "available";
+  const ctaLabel = isAvailable ? "Acheter" : "Contacter";
+  const showPrice = isAvailable && (artwork.price_on_request || artwork.price_eur != null);
+  const priceLabel = artwork.price_on_request
+    ? "Prix sur demande"
+    : artwork.price_eur != null
+      ? new Intl.NumberFormat("fr-FR", {
+          style: "currency",
+          currency: "EUR",
+          maximumFractionDigits: 0,
+        }).format(artwork.price_eur)
+      : null;
 
-            if (iErr) console.error(iErr);
-            setImages((imgs ?? []) as Img[]);
-            setLoading(false);
-        })();
-    }, [slug]);
+  return (
+    <main className="container artworkDetailPage">
+      <Link href="/gallery" className="artworkDetailBackBtn">
+        <svg
+          className="artworkDetailBackIcon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 18l-6-6 6-6" />
+        </svg>
+        <span>Retour galerie</span>
+      </Link>
 
-    if (loading) return <main className="container artworkDetailPage">Chargement…</main>;
+      <div className="artworkDetailLayout">
+        <div className="artworkDetailImageWrap">
+          {mainImg ? (
+            <ArtworkImageWithLightbox src={mainImg} alt={artwork.title} />
+          ) : (
+            <div className="artworkDetailNoImage">Aucune image</div>
+          )}
+        </div>
 
-    if (!artwork) {
-        return (
-            <main className="container artworkDetailPage">
-                <p>Œuvre introuvable.</p>
-                {errorMsg && <pre style={{ marginTop: 12, opacity: 0.8 }}>{errorMsg}</pre>}
-                <p style={{ marginTop: 12 }}>
-                    <Link href="/gallery" className="artworkDetailBackBtn">
-                        <svg
-                            className="artworkDetailBackIcon"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                        >
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 18l-6-6 6-6" />
-                        </svg>
-                        <span>Retour galerie</span>
-                    </Link>
-                </p>
-            </main>
-        );
-    }
+        <aside className="artworkDetailPanel">
+          <h1 className="artworkDetailTitle">{artwork.title}</h1>
 
-    const mainImg = images[0]?.path ? getPublicImageUrl(images[0].path) : null;
-    const statusLabel =
-        artwork.status === "available"
-            ? "Disponible"
-            : artwork.status === "reserved"
-                ? "Réservé"
-                : "Vendu";
-
-    const isAvailable = artwork.status === "available";
-
-    const ctaLabel = isAvailable ? "Acheter" : "Contacter";
-
-    const showPrice = isAvailable && (artwork.price_on_request || artwork.price_eur != null);
-
-    const priceLabel = artwork.price_on_request
-        ? "Prix sur demande"
-        : artwork.price_eur != null
-            ? new Intl.NumberFormat("fr-FR", {
-                style: "currency",
-                currency: "EUR",
-                maximumFractionDigits: 0,
-            }).format(artwork.price_eur)
-            : null;
-
-    return (
-        <main className="container artworkDetailPage">
-            <Link href="/gallery" className="artworkDetailBackBtn">
-                        <svg
-                            className="artworkDetailBackIcon"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                        >
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 18l-6-6 6-6" />
-                        </svg>
-                        <span>Retour galerie</span>
-                    </Link>
-
-            <div className="artworkDetailLayout">
-                <div className="artworkDetailImageWrap">
-                    {mainImg ? (
-                        <Image
-                            src={mainImg}
-                            alt={artwork.title}
-                            width={1200}
-                            height={900}
-                            className="artworkDetailImg"
-                            style={{ height: "auto" }}
-                            sizes="(max-width: 1024px) 100vw, 50vw"
-                            priority
-                            onClick={() => {
-                                if (typeof window !== "undefined" && window.matchMedia("(min-width: 768px)").matches) {
-                                    setIsOpen(true);
-                                }
-                            }}
-                        />
-                    ) : (
-                        <div className="artworkDetailNoImage">Aucune image</div>
-                    )}
-                </div>
-
-                <aside className="artworkDetailPanel">
-                    <h1 className="artworkDetailTitle">{artwork.title}</h1>
-
-                    <div className="artworkDetailMeta">
-                        <div className="artworkDetailMetaRow">
-                            <span className="artworkDetailMetaLabel">Statut</span>
-                            <span className="artworkDetailMetaValue">{statusLabel}</span>
-                        </div>
-
-                        {artwork.year ? (
-                            <div className="artworkDetailMetaRow">
-                                <span className="artworkDetailMetaLabel">Année</span>
-                                <span className="artworkDetailMetaValue">{artwork.year}</span>
-                            </div>
-                        ) : null}
-
-                        {artwork.width_cm && artwork.height_cm ? (
-                            <div className="artworkDetailMetaRow">
-                                <span className="artworkDetailMetaLabel">Format</span>
-                                <span className="artworkDetailMetaValue">
-                                    {artwork.width_cm} × {artwork.height_cm} cm
-                                </span>
-                            </div>
-                        ) : null}
-
-                        {artwork.technique ? (
-                            <div className="artworkDetailMetaRow">
-                                <span className="artworkDetailMetaLabel">Technique</span>
-                                <span className="artworkDetailMetaValue">{artwork.technique}</span>
-                            </div>
-                        ) : null}
-
-                        {artwork.universe ? (
-                            <div className="artworkDetailMetaRow">
-                                <span className="artworkDetailMetaLabel">Univers</span>
-                                <span className="artworkDetailMetaValue">{artwork.universe}</span>
-                            </div>
-                        ) : null}
-
-                        {artwork.subject ? (
-                            <div className="artworkDetailMetaRow">
-                                <span className="artworkDetailMetaLabel">Sujet</span>
-                                <span className="artworkDetailMetaValue">{artwork.subject}</span>
-                            </div>
-                        ) : null}
-                    </div>
-
-                    {showPrice && priceLabel ? (
-                        <div className="artworkDetailPriceRow">
-                            <span className="artworkDetailPriceLabel">Prix</span>
-                            <span className="artworkDetailPriceValue">{priceLabel}</span>
-                        </div>
-                    ) : null}
-
-                    <hr className="artworkDetailDivider" />
-
-                    {artwork.description ? (
-                        <p className="artworkDetailDescription">{artwork.description}</p>
-                    ) : null}
-
-                    <SmoothAnchor
-                        targetId="footer-contact"
-                        offset={0}
-                        className={[
-                            "artworkDetailCTA",
-                            isAvailable ? "artworkDetailCTA--buy" : "artworkDetailCTA--contact",
-                        ].join(" ")}
-                    >
-                        {ctaLabel}
-                    </SmoothAnchor>
-                </aside>
+          <div className="artworkDetailMeta">
+            <div className="artworkDetailMetaRow">
+              <span className="artworkDetailMetaLabel">Statut</span>
+              <span className="artworkDetailMetaValue">{statusLabel}</span>
             </div>
 
-            {isOpen && mainImg && (
-                <div onClick={() => setIsOpen(false)} className="artworkLightbox">
-                    <Image
-                        src={mainImg}
-                        alt={artwork.title}
-                        width={1400}
-                        height={1400}
-                        className="artworkLightboxImg"
-                        style={{ width: "auto", height: "auto" }}
-                        sizes="100vw"
-                        onClick={(e) => e.stopPropagation()}
-                    />
-                    <button onClick={() => setIsOpen(false)} className="artworkLightboxClose">
-                        Fermer
-                    </button>
-                </div>
-            )}
-        </main>
-    );
+            {artwork.year ? (
+              <div className="artworkDetailMetaRow">
+                <span className="artworkDetailMetaLabel">Année</span>
+                <span className="artworkDetailMetaValue">{artwork.year}</span>
+              </div>
+            ) : null}
+
+            {artwork.width_cm && artwork.height_cm ? (
+              <div className="artworkDetailMetaRow">
+                <span className="artworkDetailMetaLabel">Format</span>
+                <span className="artworkDetailMetaValue">
+                  {artwork.width_cm} × {artwork.height_cm} cm
+                </span>
+              </div>
+            ) : null}
+
+            {artwork.technique ? (
+              <div className="artworkDetailMetaRow">
+                <span className="artworkDetailMetaLabel">Technique</span>
+                <span className="artworkDetailMetaValue">{artwork.technique}</span>
+              </div>
+            ) : null}
+
+            {artwork.universe ? (
+              <div className="artworkDetailMetaRow">
+                <span className="artworkDetailMetaLabel">Univers</span>
+                <span className="artworkDetailMetaValue">{artwork.universe}</span>
+              </div>
+            ) : null}
+
+            {artwork.subject ? (
+              <div className="artworkDetailMetaRow">
+                <span className="artworkDetailMetaLabel">Sujet</span>
+                <span className="artworkDetailMetaValue">{artwork.subject}</span>
+              </div>
+            ) : null}
+          </div>
+
+          {showPrice && priceLabel ? (
+            <div className="artworkDetailPriceRow">
+              <span className="artworkDetailPriceLabel">Prix</span>
+              <span className="artworkDetailPriceValue">{priceLabel}</span>
+            </div>
+          ) : null}
+
+          <hr className="artworkDetailDivider" />
+
+          {artwork.description ? (
+            <p className="artworkDetailDescription">{artwork.description}</p>
+          ) : null}
+
+          <SmoothAnchor
+            targetId="footer-contact"
+            offset={0}
+            className={[
+              "artworkDetailCTA",
+              isAvailable ? "artworkDetailCTA--buy" : "artworkDetailCTA--contact",
+            ].join(" ")}
+          >
+            {ctaLabel}
+          </SmoothAnchor>
+        </aside>
+      </div>
+    </main>
+  );
 }

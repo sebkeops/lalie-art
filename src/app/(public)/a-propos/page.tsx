@@ -1,7 +1,4 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/server";
 import Image from "next/image";
 
 type ContentPage = {
@@ -11,43 +8,15 @@ type ContentPage = {
   hero_image_url: string | null;
 };
 
-export default function AboutPublicPage() {
-  const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState<ContentPage | null>(null);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+export default async function AboutPublicPage() {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("content_pages")
+    .select("title,subtitle,body,hero_image_url")
+    .eq("slug", "a-propos")
+    .maybeSingle();
 
-  useEffect(() => {
-    (async () => {
-      setLoading(true);
-      setErrorMsg(null);
-
-      const { data, error } = await supabase
-        .from("content_pages")
-        .select("title,subtitle,body,hero_image_url")
-        .eq("slug", "a-propos")
-        .maybeSingle();
-
-      if (error) {
-        setErrorMsg(error.message);
-        setPage(null);
-        setLoading(false);
-        return;
-      }
-
-      setPage((data as ContentPage) ?? null);
-      setLoading(false);
-    })();
-  }, []);
-
-  if (loading) {
-    return (
-      <main className="pageMain">
-        <div className="container">
-          <div className="card aboutCard">Chargement…</div>
-        </div>
-      </main>
-    );
-  }
+  const page = data as ContentPage | null;
 
   if (!page) {
     return (
@@ -58,11 +27,6 @@ export default function AboutPublicPage() {
             <p className="muted" style={{ marginTop: 10 }}>
               Contenu indisponible pour le moment.
             </p>
-            {errorMsg && (
-              <pre style={{ marginTop: 12, opacity: 0.8, whiteSpace: "pre-wrap" }}>
-                {errorMsg}
-              </pre>
-            )}
           </div>
         </div>
       </main>
