@@ -142,7 +142,7 @@ export function HomeContact() {
       <div className="kicker">Une œuvre vous intéresse ?</div>
       <h2 className="h2">Prenons contact</h2>
       <p className="muted" style={{ maxWidth: 520 }}>
-        Pour toute demande d'achat, de renseignement ou de commande sur mesure.
+        Artiste collagiste basée à Nîmes — pour toute demande d'achat, de renseignement ou de commande sur mesure.
       </p>
       <div className="homeContactLinks">
         <a href="mailto:crea.lalie.art@gmail.com" className="btn btn-primary">
