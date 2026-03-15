@@ -66,6 +66,7 @@ export default async function GalleryPage() {
             <div className="muted">Aucune œuvre publiée pour le moment.</div>
           </div>
         ) : (
+          <>
           <h2 className="sr-only">Liste des œuvres</h2>
           <div className="galleryGrid">
             {list.map((a, idx) => (
@@ -87,6 +88,7 @@ export default async function GalleryPage() {
               />
             ))}
           </div>
+          </>
         )}
       </section>
     </main>
