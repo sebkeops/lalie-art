@@ -102,11 +102,12 @@ export default async function ArtworkPage({
         <aside className="artworkDetailPanel" aria-label="Informations sur l'œuvre">
           <h1 className="artworkDetailTitle">{artwork.title}</h1>
 
-          <span className={`artworkDetailStatus artworkDetailStatus--${artwork.status}`}>
-            {statusLabel}
-          </span>
-
           <div className="artworkDetailMeta">
+            <div className="artworkDetailMetaRow">
+              <span className="artworkDetailMetaLabel">Statut</span>
+              <span className="artworkDetailMetaValue">{statusLabel}</span>
+            </div>
+
             {artwork.year ? (
               <div className="artworkDetailMetaRow">
                 <span className="artworkDetailMetaLabel">Année</span>
@@ -146,11 +147,13 @@ export default async function ArtworkPage({
           </div>
 
           {showPrice && priceLabel ? (
-            <div className="artworkDetailPriceRow">
+            <div className={`artworkDetailPriceRow artworkDetailPriceRow--${artwork.status}`}>
               <span className="artworkDetailPriceLabel">Prix</span>
               <span className="artworkDetailPriceValue">{priceLabel}</span>
             </div>
           ) : null}
+
+          <hr className="artworkDetailDivider" />
 
           <SmoothAnchor
             targetId="footer-contact"
@@ -164,10 +167,7 @@ export default async function ArtworkPage({
           </SmoothAnchor>
 
           {artwork.description ? (
-            <div className="artworkDetailDescSection">
-              <h2>À propos de l&apos;œuvre</h2>
-              <p className="artworkDetailDescription">{artwork.description}</p>
-            </div>
+            <p className="artworkDetailDescription">{artwork.description}</p>
           ) : null}
         </aside>
       </div>
