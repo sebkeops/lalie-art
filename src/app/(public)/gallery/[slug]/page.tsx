@@ -102,12 +102,11 @@ export default async function ArtworkPage({
         <aside className="artworkDetailPanel" aria-label="Informations sur l'œuvre">
           <h1 className="artworkDetailTitle">{artwork.title}</h1>
 
-          <div className="artworkDetailMeta">
-            <div className="artworkDetailMetaRow">
-              <span className="artworkDetailMetaLabel">Statut</span>
-              <span className="artworkDetailMetaValue">{statusLabel}</span>
-            </div>
+          <span className={`artworkDetailStatus artworkDetailStatus--${artwork.status}`}>
+            {statusLabel}
+          </span>
 
+          <div className="artworkDetailMeta">
             {artwork.year ? (
               <div className="artworkDetailMetaRow">
                 <span className="artworkDetailMetaLabel">Année</span>
@@ -153,12 +152,6 @@ export default async function ArtworkPage({
             </div>
           ) : null}
 
-          <hr className="artworkDetailDivider" />
-
-          {artwork.description ? (
-            <p className="artworkDetailDescription">{artwork.description}</p>
-          ) : null}
-
           <SmoothAnchor
             targetId="footer-contact"
             offset={0}
@@ -169,6 +162,13 @@ export default async function ArtworkPage({
           >
             {ctaLabel}
           </SmoothAnchor>
+
+          {artwork.description ? (
+            <div className="artworkDetailDescSection">
+              <h2>À propos de l&apos;œuvre</h2>
+              <p className="artworkDetailDescription">{artwork.description}</p>
+            </div>
+          ) : null}
         </aside>
       </div>
     </main>
