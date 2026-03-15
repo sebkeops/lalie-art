@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import SmoothAnchor from "@/components/SmoothAnchor";
 import { ArtworkCard } from "@/components/ArtworkCard";
 import type { ArtworkCardData } from "@/components/ArtworkCard";
@@ -9,6 +10,15 @@ import type { ArtworkCardData } from "@/components/ArtworkCard";
 export function HomeHero() {
   return (
     <section className="hero" aria-label="Présentation">
+      <Image
+        src="/hero.jpg"
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className="heroImg"
+        aria-hidden="true"
+      />
       <div className="container homeHeroInner">
         <motion.h1
           className="h1"

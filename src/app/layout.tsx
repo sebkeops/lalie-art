@@ -12,6 +12,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="fr">
       <head>
+        <link rel="preconnect" href="https://use.typekit.net" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://p.typekit.net" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://bjygrcoiriouwucdcfjs.supabase.co" crossOrigin="anonymous" />
         <link rel="stylesheet" href="https://use.typekit.net/hry1sbn.css" />
       </head>
       <body>
