@@ -1312,11 +1312,10 @@ select option {
 
 /* Image */
 .artworkDetailImageWrap {
-  border-radius: 22px;
-  overflow: hidden;
   background: rgba(0, 0, 0, .25);
   border: 1px solid rgba(255, 245, 230, .10);
   box-shadow: 0 28px 70px rgba(0, 0, 0, .42);
+  border-radius: 22px;
 }
 
 @media (min-width: 1024px) {
@@ -1333,6 +1332,8 @@ select option {
   border: none;
   padding: 0;
   cursor: zoom-in;
+  border-radius: 22px;
+  overflow: hidden;
 }
 
 .artworkDetailImgBtn:focus-visible {
@@ -1409,7 +1410,7 @@ select option {
 }
 
 .artworkDetailDescription {
-  margin: 0;
+  margin: 14px 0 0;
   white-space: pre-wrap;
   line-height: 1.65;
   color: rgba(255, 245, 230, .90);

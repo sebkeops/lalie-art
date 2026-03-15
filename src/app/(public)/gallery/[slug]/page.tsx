@@ -62,6 +62,13 @@ export default async function ArtworkPage({
         ? "Réservé"
         : "Vendu";
 
+  const statusBadgeClass =
+    artwork.status === "available"
+      ? "artworkStatusBadge artworkStatusAvailable"
+      : artwork.status === "reserved"
+        ? "artworkStatusBadge artworkStatusReserved"
+        : "artworkStatusBadge artworkStatusSold";
+
   const isAvailable = artwork.status === "available";
   const ctaLabel = isAvailable ? "Acheter" : "Contacter";
   const showPrice = artwork.price_on_request || artwork.price_eur != null;
@@ -105,7 +112,7 @@ export default async function ArtworkPage({
           <div className="artworkDetailMeta">
             <div className="artworkDetailMetaRow">
               <span className="artworkDetailMetaLabel">Statut</span>
-              <span className="artworkDetailMetaValue">{statusLabel}</span>
+              <span className={statusBadgeClass}>{statusLabel}</span>
             </div>
 
             {artwork.year ? (
