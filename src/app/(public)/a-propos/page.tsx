@@ -48,6 +48,7 @@ export default async function AboutPublicPage() {
                   className="aboutImage"
                   style={{ height: "auto" }}
                   sizes="(max-width: 820px) 100vw, 40vw"
+                  priority
                 />
               </div>
             ) : null}

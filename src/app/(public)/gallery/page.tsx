@@ -66,11 +66,13 @@ export default async function GalleryPage() {
             <div className="muted">Aucune œuvre publiée pour le moment.</div>
           </div>
         ) : (
+          <h2 className="sr-only">Liste des œuvres</h2>
           <div className="galleryGrid">
-            {list.map((a) => (
+            {list.map((a, idx) => (
               <ArtworkCard
                 key={a.id}
                 hrefBase="/gallery"
+                priority={idx < 3}
                 artwork={{
                   id: a.id,
                   slug: a.slug,

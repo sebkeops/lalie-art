@@ -36,9 +36,11 @@ function statusClasses(status: ArtworkCardData["status"]) {
 export function ArtworkCard({
     artwork,
     hrefBase = "/gallery",
+    priority = false,
 }: {
     artwork: ArtworkCardData;
     hrefBase?: string;
+    priority?: boolean;
 }) {
     const meta = [artwork.universe, artwork.subject].filter(Boolean).join(" · ");
     const href = `${hrefBase}/${artwork.slug}`;
@@ -58,6 +60,7 @@ export function ArtworkCard({
                                 style={{ height: "auto" }}
                                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                 draggable={false}
+                                priority={priority}
                             />
                         ) : (
                             <div className="artworkCardImg artworkCardPlaceholder" />

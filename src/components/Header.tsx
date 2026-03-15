@@ -26,30 +26,6 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
   );
 }
 
-function HomeIconLink() {
-  const pathname = usePathname();
-  const active = pathname === "/";
-
-  return (
-    <Link
-      href="/"
-      className={["homeIconLink", active ? "homeIconLinkActive" : ""].join(" ")}
-      aria-label="Retour à l'accueil"
-      aria-current={active ? "page" : undefined}
-      title="Accueil"
-      onClick={active ? () => window.location.reload() : undefined}
-    >
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path
-          d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1v-10.5Z"
-          stroke="currentColor"
-          strokeWidth="1.6"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </Link>
-  );
-}
 
 export default function Header() {
   const pathname = usePathname();
@@ -67,9 +43,6 @@ export default function Header() {
           >
             <Image src="/logo.svg" alt="Lalie — Crea Lalie Art" width={162} height={65} className="logo logoPublic" priority />
           </Link>
-
-          {/* Picto mobile positionné indépendamment */}
-          <HomeIconLink />
 
           <nav className="publicNav" aria-label="Navigation">
             <NavLink href="/">Accueil</NavLink>
