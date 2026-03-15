@@ -64,7 +64,7 @@ export default async function ArtworkPage({
 
   const isAvailable = artwork.status === "available";
   const ctaLabel = isAvailable ? "Acheter" : "Contacter";
-  const showPrice = isAvailable && (artwork.price_on_request || artwork.price_eur != null);
+  const showPrice = artwork.price_on_request || artwork.price_eur != null;
   const priceLabel = artwork.price_on_request
     ? "Prix sur demande"
     : artwork.price_eur != null
@@ -93,13 +93,13 @@ export default async function ArtworkPage({
       <div className="artworkDetailLayout">
         <div className="artworkDetailImageWrap">
           {mainImg ? (
-            <ArtworkImageWithLightbox src={mainImg} alt={artwork.title} />
+            <ArtworkImageWithLightbox src={mainImg} alt={`Collage de Lalie — ${artwork.title}`} />
           ) : (
             <div className="artworkDetailNoImage">Aucune image</div>
           )}
         </div>
 
-        <aside className="artworkDetailPanel">
+        <aside className="artworkDetailPanel" aria-label="Informations sur l'œuvre">
           <h1 className="artworkDetailTitle">{artwork.title}</h1>
 
           <div className="artworkDetailMeta">

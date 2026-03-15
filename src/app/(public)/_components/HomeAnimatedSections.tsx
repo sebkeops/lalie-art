@@ -8,7 +8,7 @@ import type { ArtworkCardData } from "@/components/ArtworkCard";
 
 export function HomeHero() {
   return (
-    <section className="hero">
+    <section className="hero" aria-label="Présentation">
       <div className="container homeHeroInner">
         <motion.h1
           className="h1"
@@ -59,6 +59,7 @@ export function HomeHero() {
 export function HomeAboutCard() {
   return (
     <motion.section
+      aria-label="À propos de Lalie"
       className="card homeAboutCard"
       initial={{ opacity: 0, y: 18 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -88,7 +89,7 @@ export function HomeAboutCard() {
 
 export function HomeFeatured({ artworks }: { artworks: ArtworkCardData[] }) {
   return (
-    <section className="homeFeatured">
+    <section className="homeFeatured" aria-label="Œuvres à la une">
       <div className="homeFeaturedHeader">
         <div>
           <h2 className="h2">Œuvres à la une</h2>
@@ -133,6 +134,7 @@ export function HomeContact() {
   return (
     <motion.section
       id="contact"
+      aria-label="Contact"
       className="homeContact"
       initial={{ opacity: 0, y: 18 }}
       whileInView={{ opacity: 1, y: 0 }}

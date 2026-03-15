@@ -53,7 +53,7 @@ export default async function GalleryPage() {
 
   return (
     <main className="pageMain">
-      <section className="container" style={{ display: "grid", gap: 18 }}>
+      <section className="container" aria-label="Galerie d'œuvres" style={{ display: "grid", gap: 18 }}>
         <div className="card" style={{ padding: 20 }}>
           <h1 className="h1">Galerie</h1>
           <p className="muted" style={{ margin: "10px 0 0", maxWidth: 820, lineHeight: 1.7 }}>

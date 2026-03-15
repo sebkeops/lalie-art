@@ -51,7 +51,7 @@ export function ArtworkCard({
                         {artwork.imageUrl ? (
                             <Image
                                 src={artwork.imageUrl}
-                                alt={artwork.title}
+                                alt={`Collage de Lalie — ${artwork.title}`}
                                 width={600}
                                 height={600}
                                 className="artworkCardImg"

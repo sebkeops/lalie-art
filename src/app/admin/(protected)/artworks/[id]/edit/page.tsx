@@ -454,7 +454,7 @@ export default function EditArtworkPage() {
             <div className="grid gap-5 md:grid-cols-2 items-start">
               <div className="grid gap-2">
                 <Label>Statut</Label>
-                <Select value={status} onChange={(e) => setStatus(e.target.value as any)}>
+                <Select value={status} onChange={(e) => setStatus(e.target.value as "available" | "reserved" | "sold")}>
                   <option value="available">Disponible</option>
                   <option value="reserved">Réservé</option>
                   <option value="sold">Vendu</option>

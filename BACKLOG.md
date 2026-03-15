@@ -19,9 +19,13 @@ Légende : ✅ Traité · 🔄 En cours · ⬜ À faire · ❌ Abandonné
 
 ## 🟠 Haute priorité
 
-- ⬜ **Favicon** — ajouter le logo comme favicon (fichier `icon.png` ou `favicon.ico` dans `src/app/`)
+- ✅ **Favicon** — `logo-secondaire-clair.png` copié en `src/app/icon.png` (Next.js App Router)
 
-- ⬜ **Prix sur page détail** — afficher le prix même pour les œuvres réservées ou vendues (actuellement masqué si statut ≠ "available")
+- ✅ **Prix sur page détail** — prix affiché même pour les œuvres réservées ou vendues
+
+- ✅ **Loader** — remplacement du logo secondaire moche par `logo.svg` avec animation douce
+
+- ✅ **OG image** — `og-image.jpg` (1200×630) ajoutée et déclarée dans les métadonnées Open Graph
 
 - ✅ **Security headers** — ajoutés dans `next.config.ts` : X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy
 
@@ -39,19 +43,19 @@ Légende : ✅ Traité · 🔄 En cours · ⬜ À faire · ❌ Abandonné
 ### Accessibilité (a11y)
 - ⬜ Audit complet : Lighthouse + navigation clavier + contrastes WCAG AA
 - ⬜ Contraste couleurs : auditer `--wine`, `.muted`, `--rose` sur fond sombre (ratio min 4.5:1)
-- ⬜ Focus visible : vérifier que l'outline n'est pas supprimé dans globals.css
-- ⬜ Lightbox page détail : ajouter `role="dialog"`, `aria-modal`, fermeture par `Escape`, piège focus
-- ⬜ Alt texts plus descriptifs : ex. "Collage de Lalie — [titre]" plutôt que juste le titre
-- ⬜ Balises sémantiques : ajouter `<article>` sur les cards d'œuvres, `aria-label` sur les `<section>`
-- ⬜ Formulaires admin : vérifier aria-labels sur tous les inputs
+- ✅ Focus visible : règle `:focus-visible` globale ajoutée dans globals.css (`outline: 2px solid var(--wine)`)
+- ✅ Lightbox page détail : `role="dialog"`, `aria-modal`, fermeture `Escape`, piège focus, retour focus sur déclencheur
+- ✅ Alt texts plus descriptifs : "Collage de Lalie — [titre]" sur toutes les images d'œuvres
+- ✅ Balises sémantiques : `<article>` sur les cards, `aria-label` sur toutes les `<section>` publiques
+- ✅ Formulaires admin : tous les inputs ont un label associé (audit complet OK)
 
 ### Code quality
-- ⬜ Supprimer les `as any` restants dans le code (galerie détail, home)
+- ✅ Supprimer les `as any` restants — remplacés par `"available" | "reserved" | "sold"` dans les pages admin
 - ⬜ Vérifier le RLS Supabase — s'assurer que les policies protègent bien les données admin côté client
 
 ### Dev & Maintenance
-- ⬜ Vérifier/créer un README projet (setup local, variables d'env, déploiement)
-- ⬜ Revoir la stratégie de branches Git (feature branches plutôt que tout sur main)
+- ✅ README projet — setup local, variables d'env, structure, déploiement
+- ✅ Stratégie de branches Git — develop/main en place, documentée dans README et CLAUDE.md
 
 ---
 
@@ -70,11 +74,9 @@ Légende : ✅ Traité · 🔄 En cours · ⬜ À faire · ❌ Abandonné
 - ✅ robots.txt
 - ✅ sitemap.xml dynamique (pages statiques + slugs œuvres)
 - ✅ Metadata par page (titre, description) via layouts serveur
-- ✅ Open Graph — preview réseaux sociaux (og:title, og:description)
+- ✅ Open Graph — preview réseaux sociaux (og:title, og:description, og:image)
 - ✅ URLs propres — slugs lisibles (/gallery/mon-oeuvre)
-
-### Chantier structurel
-- ⬜ Convertir les pages publiques en Server Components (voir section Critique ci-dessus)
+- ✅ SEO local — localisation Nîmes dans metadata et section contact
 
 ---
 

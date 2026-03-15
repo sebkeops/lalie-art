@@ -36,13 +36,13 @@ export default async function AboutPublicPage() {
   return (
     <main className="pageMain">
       <div className="container">
-        <section className="card aboutCard">
+        <section className="card aboutCard" aria-label="À propos de Lalie">
           <div className="aboutLayout">
             {page.hero_image_url ? (
               <div className="aboutImageCol">
                 <Image
                   src={page.hero_image_url}
-                  alt=""
+                  alt="Portrait de Lalie, artiste collagiste à Nîmes"
                   width={600}
                   height={800}
                   className="aboutImage"

@@ -287,7 +287,7 @@ export default function NewArtworkPage() {
                 <Label>Statut</Label>
                 <Select
                   value={status}
-                  onChange={(e) => setStatus(e.target.value as any)}
+                  onChange={(e) => setStatus(e.target.value as "available" | "reserved" | "sold")}
                 >
                   <option value="available">Disponible</option>
                   <option value="reserved">Réservé</option>
