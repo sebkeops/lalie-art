@@ -9,19 +9,25 @@ Légende : ✅ Traité · 🔄 En cours · ⬜ À faire · ❌ Abandonné
 - ✅ **Images non optimisées** — `<img>` remplacés par `<Image>` Next.js sur toutes les pages publiques (WebP/AVIF auto, lazy loading, srcset, priority sur LCP)
   - Admin gardé en `<img>` (previews blob: URL non supportées par next/image)
 
-- ⬜ **Pages publiques en Server Components** — actuellement toutes `"use client"` → HTML vide pour les crawlers, contenu non indexé par Google
-  - Chantier structurel : Home, Galerie, À propos, Détail œuvre
-  - Garder framer-motion côté client via des sous-composants
+- ✅ **Pages publiques en Server Components** — Home, Galerie, À propos, Détail œuvre convertis
+  - Fetch Supabase côté serveur, HTML complet dès le premier chargement
+  - Animations Framer Motion extraites en sous-composants clients (`HomeAnimatedSections.tsx`)
+  - Lightbox extraite en `ArtworkImageWithLightbox` (client)
+  - Scroll-to-contact extrait en `ContactScrollEffect` (client)
 
 ---
 
 ## 🟠 Haute priorité
 
+- ⬜ **Favicon** — ajouter le logo comme favicon (fichier `icon.png` ou `favicon.ico` dans `src/app/`)
+
+- ⬜ **Prix sur page détail** — afficher le prix même pour les œuvres réservées ou vendues (actuellement masqué si statut ≠ "available")
+
 - ✅ **Security headers** — ajoutés dans `next.config.ts` : X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy
 
 - ✅ **Page 404 custom** — `src/app/not-found.tsx` créé (cohérent avec le design, liens retour accueil + galerie)
 
-- ⬜ **Google Search Console** — soumettre le sitemap, suivre l'indexation
+- ✅ **Google Search Console** — propriété validée, sitemap soumis (`crealalieart.fr/sitemap.xml`)
 
 - ⬜ **Analytics** — intégrer Plausible (privacy-first, léger) ou Google Analytics
   - Si analytics → prévoir bandeau RGPD
