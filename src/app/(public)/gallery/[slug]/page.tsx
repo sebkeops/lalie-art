@@ -154,7 +154,7 @@ export default async function ArtworkPage({
           </div>
 
           {showPrice && priceLabel ? (
-            <div className={`artworkDetailPriceRow artworkDetailPriceRow--${artwork.status}`}>
+            <div className="artworkDetailPriceRow">
               <span className="artworkDetailPriceLabel">Prix</span>
               <span className="artworkDetailPriceValue">{priceLabel}</span>
             </div>
