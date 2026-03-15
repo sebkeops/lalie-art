@@ -1587,65 +1587,10 @@ select option {
   gap: 0.5rem;
 }
 
-/* Icône accueil (mobile) : discret, “velours” */
-.homeIconLink {
-  display: none;
-  /* activé en mobile via media query */
-  width: 34px;
-  height: 34px;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 999px;
-  color: var(--text);
-
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
-
-  opacity: 0.85;
-}
-
-.homeIconLink:hover {
-  opacity: 1;
-}
-
-.homeIconLinkActive {
-  opacity: 1;
-  border-color: rgba(255, 255, 255, 0.12);
-}
-
 /* Mobile uniquement */
 @media (max-width: 860px) {
 
-  .homeIconLink {
-    display: inline-flex;
-
-    position: absolute;
-    top: 12px;
-    right: 16px;
-
-    width: 34px;
-    height: 34px;
-
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 999px;
-    color: var(--text);
-
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-
-    backdrop-filter: blur(8px);
-    opacity: 0.9;
-  }
-
-  .homeIconLink:hover {
-    opacity: 1;
-  }
-
-  /* Masquer le lien texte "Accueil" dans la nav mobile */
+  /* Masquer le lien texte “Accueil” dans la nav desktop sur mobile */
   .publicNav .navLinkPublic:first-child {
     display: none;
   }
