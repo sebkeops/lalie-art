@@ -74,7 +74,7 @@ export default function EditArtworkPage() {
   const [technique, setTechnique] = useState("");
   const [universe, setUniverse] = useState("");
   const [subject, setSubject] = useState("");
-  const [status, setStatus] = useState<"available" | "reserved" | "sold">(
+  const [status, setStatus] = useState<"available" | "reserved" | "sold" | "private">(
     "available"
   );
   const [priceOnRequest, setPriceOnRequest] = useState(true);
