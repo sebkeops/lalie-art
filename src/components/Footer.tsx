@@ -47,13 +47,6 @@ export default function Footer() {
                         Musique, icônes, visages, histoires.
                     </div>
                 </div>
-
-                <div className="footerBottom">
-                    <span>© {new Date().getFullYear()} Crea Lalie Art</span>
-                    <a className="footerSmallLink" href="/admin/login">
-                        Admin
-                    </a>
-                </div>
             </div>
         </footer>
     );
