@@ -19,7 +19,11 @@ Légende : ✅ Traité · 🔄 En cours · ⬜ À faire · ❌ Abandonné
 
 ## 🟠 Haute priorité
 
+- 🔄 **Lightbox page détail — z-index** — fix appliqué (`z-index: 9999` lightbox, `10000` close button). À valider visuellement en preview : header et panneau infos ne doivent plus passer devant l'overlay.
+
 - ✅ **Favicon** — `logo-secondaire-clair.png` copié en `src/app/icon.png` (Next.js App Router)
+
+- ⬜ **Apple Touch Icon** — ajouter `src/app/apple-icon.png` (180×180px) pour l'icône d'accueil iOS/iPadOS
 
 - ✅ **Prix sur page détail** — prix affiché même pour les œuvres réservées ou vendues
 
@@ -53,6 +57,21 @@ Légende : ✅ Traité · 🔄 En cours · ⬜ À faire · ❌ Abandonné
 - ✅ Supprimer les `as any` restants — remplacés par `"available" | "reserved" | "sold"` dans les pages admin
 - ⬜ Vérifier le RLS Supabase — s'assurer que les policies protègent bien les données admin côté client
 
+### Sécurité
+- ⬜ **Pages admin exclues du crawl** — vérifier que `/admin/*` est bien bloqué dans `robots.txt` ET que les pages admin ont `robots: { index: false }` dans leurs métadonnées
+
+### Pages légales (obligatoire légalement en France)
+- ⬜ **Mentions légales** — nom, statut, adresse, hébergeur (Vercel), éditeur
+- ⬜ **Politique de confidentialité** — si analytics activé : données collectées, durée de conservation, droits RGPD
+- ⬜ Liens vers ces pages visibles dans le footer sur toutes les pages
+- ⬜ Pages incluses dans le `sitemap.xml`
+
+### Déploiement & infrastructure
+- ⬜ **Redirection www → apex** — vérifier sur Vercel que `www.crealalieart.fr` redirige bien vers `crealalieart.fr` (ou inverse)
+
+### Performance
+- ⬜ **Audit Lighthouse en prod** — mesurer les Core Web Vitals réels sur `crealalieart.fr` (LCP < 2,5s, INP < 200ms, CLS < 0,1) et noter la baseline
+
 ### Dev & Maintenance
 - ✅ README projet — setup local, variables d'env, structure, déploiement
 - ✅ Stratégie de branches Git — develop/main en place, documentée dans README et CLAUDE.md
@@ -77,6 +96,11 @@ Légende : ✅ Traité · 🔄 En cours · ⬜ À faire · ❌ Abandonné
 - ✅ Open Graph — preview réseaux sociaux (og:title, og:description, og:image)
 - ✅ URLs propres — slugs lisibles (/gallery/mon-oeuvre)
 - ✅ SEO local — localisation Nîmes dans metadata et section contact
+
+### À traiter
+- ⬜ **Balise `canonical`** — ajouter `alternates.canonical` dans les métadonnées de chaque page (Next.js App Router le gère nativement)
+- ⬜ **`og:url` via variable d'env** — vérifier que l'URL de base n'est pas hardcodée dans les metadata (utiliser `process.env.NEXT_PUBLIC_BASE_URL`)
+- ⬜ **Schema.org JSON-LD** — pertinent pour un site d'artiste : schema `Person` (artiste) + `LocalBusiness` ou `ArtGallery` sur la home, `VisualArtwork` sur les pages détail œuvre
 
 ---
 

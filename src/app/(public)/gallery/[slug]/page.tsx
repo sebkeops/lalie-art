@@ -160,8 +160,6 @@ export default async function ArtworkPage({
             </div>
           ) : null}
 
-          <hr className="artworkDetailDivider" />
-
           <SmoothAnchor
             targetId="footer-contact"
             offset={0}
@@ -172,6 +170,8 @@ export default async function ArtworkPage({
           >
             {ctaLabel}
           </SmoothAnchor>
+
+          <hr className="artworkDetailDivider" />
 
           {artwork.description ? (
             <p className="artworkDetailDescription">{artwork.description}</p>

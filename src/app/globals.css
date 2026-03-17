@@ -1423,7 +1423,7 @@ select option {
   display: grid;
   place-items: center;
   padding: 24px;
-  z-index: 50;
+  z-index: 9999;
   cursor: zoom-out;
 }
 
@@ -1439,6 +1439,7 @@ select option {
   position: fixed;
   top: 16px;
   right: 16px;
+  z-index: 10000;
   padding: 10px 12px;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, .20);
