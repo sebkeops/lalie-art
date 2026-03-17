@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 
 export function ArtworkImageWithLightbox({
@@ -11,6 +12,9 @@ export function ArtworkImageWithLightbox({
   alt: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => { setMounted(true); }, []);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
 
@@ -66,7 +70,7 @@ export function ArtworkImageWithLightbox({
         />
       </button>
 
-      {isOpen && (
+      {isOpen && mounted && createPortal(
         <div
           role="dialog"
           aria-modal="true"
@@ -92,7 +96,8 @@ export function ArtworkImageWithLightbox({
           >
             Fermer
           </button>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

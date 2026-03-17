@@ -46,7 +46,7 @@ export default function NewArtworkPage() {
   const [technique, setTechnique] = useState("");
   const [universe, setUniverse] = useState("");
   const [subject, setSubject] = useState("");
-  const [status, setStatus] = useState<"available" | "reserved" | "sold">(
+  const [status, setStatus] = useState<"available" | "reserved" | "sold" | "private">(
     "available"
   );
   const [priceOnRequest, setPriceOnRequest] = useState(true);
@@ -287,11 +287,12 @@ export default function NewArtworkPage() {
                 <Label>Statut</Label>
                 <Select
                   value={status}
-                  onChange={(e) => setStatus(e.target.value as "available" | "reserved" | "sold")}
+                  onChange={(e) => setStatus(e.target.value as "available" | "reserved" | "sold" | "private")}
                 >
                   <option value="available">Disponible</option>
                   <option value="reserved">Réservé</option>
                   <option value="sold">Vendu</option>
+                  <option value="private">Collection privée</option>
                 </Select>
               </div>
 

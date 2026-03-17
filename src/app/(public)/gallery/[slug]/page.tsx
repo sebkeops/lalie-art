@@ -15,7 +15,7 @@ type Artwork = {
   technique: string | null;
   universe: string | null;
   subject: string | null;
-  status: "available" | "reserved" | "sold";
+  status: "available" | "reserved" | "sold" | "private";
   price_on_request: boolean;
   price_eur: number | null;
 };
@@ -60,7 +60,18 @@ export default async function ArtworkPage({
       ? "Disponible"
       : artwork.status === "reserved"
         ? "Réservé"
-        : "Vendu";
+        : artwork.status === "private"
+          ? "Collection privée"
+          : "Vendu";
+
+  const statusBadgeClass =
+    artwork.status === "available"
+      ? "artworkStatusBadge artworkStatusAvailable"
+      : artwork.status === "reserved"
+        ? "artworkStatusBadge artworkStatusReserved"
+        : artwork.status === "private"
+          ? "artworkStatusBadge artworkStatusPrivate"
+          : "artworkStatusBadge artworkStatusSold";
 
   const isAvailable = artwork.status === "available";
   const ctaLabel = isAvailable ? "Acheter" : "Contacter";
@@ -105,7 +116,7 @@ export default async function ArtworkPage({
           <div className="artworkDetailMeta">
             <div className="artworkDetailMetaRow">
               <span className="artworkDetailMetaLabel">Statut</span>
-              <span className="artworkDetailMetaValue">{statusLabel}</span>
+              <span className={statusBadgeClass}>{statusLabel}</span>
             </div>
 
             {artwork.year ? (
@@ -153,12 +164,6 @@ export default async function ArtworkPage({
             </div>
           ) : null}
 
-          <hr className="artworkDetailDivider" />
-
-          {artwork.description ? (
-            <p className="artworkDetailDescription">{artwork.description}</p>
-          ) : null}
-
           <SmoothAnchor
             targetId="footer-contact"
             offset={0}
@@ -169,6 +174,12 @@ export default async function ArtworkPage({
           >
             {ctaLabel}
           </SmoothAnchor>
+
+          <hr className="artworkDetailDivider" />
+
+          {artwork.description ? (
+            <p className="artworkDetailDescription">{artwork.description}</p>
+          ) : null}
         </aside>
       </div>
     </main>

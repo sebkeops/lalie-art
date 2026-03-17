@@ -7,7 +7,7 @@ export type ArtworkCardData = {
     id: string;
     slug: string;
     title: string;
-    status: "available" | "reserved" | "sold";
+    status: "available" | "reserved" | "sold" | "private";
     price_on_request: boolean;
     price_eur: number | null;
     universe: string | null;
@@ -24,12 +24,14 @@ function formatPrice(a: ArtworkCardData) {
 function statusLabel(status: ArtworkCardData["status"]) {
     if (status === "available") return "Disponible";
     if (status === "reserved") return "Réservé";
+    if (status === "private") return "Collection privée";
     return "Vendu";
 }
 
 function statusClasses(status: ArtworkCardData["status"]) {
     if (status === "available") return "artworkStatusBadge artworkStatusAvailable";
     if (status === "reserved") return "artworkStatusBadge artworkStatusReserved";
+    if (status === "private") return "artworkStatusBadge artworkStatusPrivate";
     return "artworkStatusBadge artworkStatusSold";
 }
 
