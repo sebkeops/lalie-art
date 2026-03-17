@@ -48,7 +48,7 @@ type Artwork = {
   technique: string | null;
   universe: string | null;
   subject: string | null;
-  status: "available" | "reserved" | "sold";
+  status: "available" | "reserved" | "sold" | "private";
   price_on_request: boolean;
   price_eur: number | null;
   is_published: boolean;
@@ -454,10 +454,11 @@ export default function EditArtworkPage() {
             <div className="grid gap-5 md:grid-cols-2 items-start">
               <div className="grid gap-2">
                 <Label>Statut</Label>
-                <Select value={status} onChange={(e) => setStatus(e.target.value as "available" | "reserved" | "sold")}>
+                <Select value={status} onChange={(e) => setStatus(e.target.value as "available" | "reserved" | "sold" | "private")}>
                   <option value="available">Disponible</option>
                   <option value="reserved">Réservé</option>
                   <option value="sold">Vendu</option>
+                  <option value="private">Collection privée</option>
                 </Select>
               </div>
 

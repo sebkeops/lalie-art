@@ -1073,6 +1073,12 @@ select option {
   color: rgba(255, 245, 230, 0.80);
 }
 
+.artworkStatusPrivate {
+  border-color: rgba(147, 197, 253, 0.30);
+  background: rgba(59, 130, 246, 0.10);
+  color: rgba(219, 234, 254, 0.95);
+}
+
 .footerBottom {
   grid-column: 1 / -1;
 }

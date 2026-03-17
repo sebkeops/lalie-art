@@ -15,7 +15,7 @@ type Artwork = {
   technique: string | null;
   universe: string | null;
   subject: string | null;
-  status: "available" | "reserved" | "sold";
+  status: "available" | "reserved" | "sold" | "private";
   price_on_request: boolean;
   price_eur: number | null;
 };
@@ -60,14 +60,18 @@ export default async function ArtworkPage({
       ? "Disponible"
       : artwork.status === "reserved"
         ? "Réservé"
-        : "Vendu";
+        : artwork.status === "private"
+          ? "Collection privée"
+          : "Vendu";
 
   const statusBadgeClass =
     artwork.status === "available"
       ? "artworkStatusBadge artworkStatusAvailable"
       : artwork.status === "reserved"
         ? "artworkStatusBadge artworkStatusReserved"
-        : "artworkStatusBadge artworkStatusSold";
+        : artwork.status === "private"
+          ? "artworkStatusBadge artworkStatusPrivate"
+          : "artworkStatusBadge artworkStatusSold";
 
   const isAvailable = artwork.status === "available";
   const ctaLabel = isAvailable ? "Acheter" : "Contacter";

@@ -19,7 +19,7 @@ Légende : ✅ Traité · 🔄 En cours · ⬜ À faire · ❌ Abandonné
 
 ## 🟠 Haute priorité
 
-- 🔄 **Lightbox page détail — z-index** — fix appliqué (`z-index: 9999` lightbox, `10000` close button). À valider visuellement en preview : header et panneau infos ne doivent plus passer devant l'overlay.
+- ✅ **Lightbox page détail — z-index** — fix via `createPortal` (éjecte le dialog hors du conteneur `position:sticky`). Header et panneau infos ne se superposent plus.
 
 - ✅ **Favicon** — `logo-secondaire-clair.png` copié en `src/app/icon.png` (Next.js App Router)
 
